@@ -34,16 +34,10 @@ class Role {
 +admin
 }
 User --> Role
-
-stateDiagram-v2
-[*] --> customer
-customer : role = customer
-admin : role = admin
-customer --> admin : promote / toggle_role()
-admin --> customer : demote / toggle_role()
-customer --> customer : no-op
-admin --> admin : no-op
 ```
+
+<img width="946" height="595" alt="image" src="https://github.com/user-attachments/assets/27e3389d-3eaa-4994-bce9-7fefa2565d23" />
+
 
 ---
 
