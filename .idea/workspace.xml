@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="Add dotenv-rails gem and configure database to use ENV URLs">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="Add IntelliJ data source configuration for the development environment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +28,9 @@
     &quot;accountId&quot;: &quot;978466ca-1190-4215-a801-ef0a654296e3&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="AISelfReview" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -43,6 +44,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1759779758265",
     "credentialsType org.jetbrains.plugins.ruby.remote.impl.RubyCreateRemoteInterpreterDialog$RubyCreateRemoteSdkForm": "WSL",
     "git-widget-placeholder": "main",
@@ -214,7 +216,7 @@
       <updated>1759726722195</updated>
       <workItem from="1759726723385" duration="1322000" />
       <workItem from="1759729165446" duration="528000" />
-      <workItem from="1759779701649" duration="3012000" />
+      <workItem from="1759779701649" duration="4423000" />
     </task>
     <task id="LOCAL-00001" summary="idea file">
       <option name="closed" value="true" />
@@ -232,15 +234,35 @@
       <option name="project" value="LOCAL" />
       <updated>1759781728745</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add IntelliJ data source configuration for the development environment">
+      <option name="closed" value="true" />
+      <created>1759782949753</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1759782949753</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="idea file" />
     <MESSAGE value="Add dotenv-rails gem and configure database to use ENV URLs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add dotenv-rails gem and configure database to use ENV URLs" />
+    <MESSAGE value="Add IntelliJ data source configuration for the development environment" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add IntelliJ data source configuration for the development environment" />
   </component>
 </project>
