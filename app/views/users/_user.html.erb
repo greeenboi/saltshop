@@ -1,42 +1,69 @@
-<div id="<%= dom_id user %>">
-  <p>
-    <strong>Username:</strong>
-    <%= user.username %>
-  </p>
+<div id="<%= dom_id user %>" class="card card-interactive p-4 flex flex-col gap-4 group relative">
+  <!-- Overlay link makes whole card clickable (except explicit buttons) -->
+  <%= link_to user, class: 'absolute inset-0 z-0 focus:outline-none', aria: { label: "View user #{user.username}" } do %><span class="sr-only">View</span><% end %>
 
-  <p>
-    <strong>Password:</strong>
-    <%= user.password %>
-  </p>
+  <div class="flex items-start gap-4 relative z-10">
+    <div class="flex-shrink-0">
+      <% if user.photo_url.present? %>
+        <%= image_tag user.photo_url, alt: user.name || user.username, class: 'h-14 w-14 rounded-full object-cover border border-gray-200 shadow-sm group-hover:shadow transition-shadow' %>
+      <% else %>
+        <% initials = (user.name.presence || user.username).to_s.split.map { |s| s[0] }.join.upcase[0,2] %>
+        <div class="avatar-fallback h-14 w-14 text-base group-hover:shadow-sm transition-shadow"><%= initials %></div>
+      <% end %>
+    </div>
 
-  <p>
-    <strong>Role:</strong>
-    <%= user.role %>
-  </p>
+    <div class="flex-1 min-w-0 flex flex-col gap-2">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="text-sm font-semibold text-gray-900 leading-tight truncate max-w-[10rem] sm:max-w-[14rem]">
+              <%= user.username %>
+            </h2>
+            <% role = user.role.to_s.downcase %>
+            <% badge_class = case role
+              when 'admin' then 'badge-admin'
+              when 'moderator' then 'badge-mod'
+              else 'badge-user'
+            end %>
+            <span class="badge <%= badge_class %>"> <%= user.role.presence || 'user' %> </span>
+          </div>
+          <p class="text-xs text-muted leading-tight mt-0.5 truncate max-w-sm">
+            <%= user.name.presence || '—' %>
+          </p>
+        </div>
 
-  <p>
-    <strong>Date created:</strong>
-    <%= user.date_created %>
-  </p>
+        <div class="flex items-center gap-1 -mr-1">
+          <%= link_to edit_user_path(user), class: 'action-icon relative z-20', title: 'Edit user' do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5h2m-1 14v0M4.5 20.5l15-15a2.121 2.121 0 10-3-3l-15 15V20.5H4.5z"/></svg>
+            <span class="sr-only">Edit</span>
+          <% end %>
+          <%= link_to user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-icon text-red-500 hover:text-red-600 relative z-20', title: 'Delete user' do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m2 0v12a2 2 0 01-2 2H8a2 2 0 01-2-2V7m3 4v6m4-6v6"/></svg>
+            <span class="sr-only">Delete</span>
+          <% end %>
+        </div>
+      </div>
 
-  <p>
-    <strong>Name:</strong>
-    <%= user.name %>
-  </p>
+      <div class="text-xs text-subtle line-clamp-3 leading-relaxed">
+        <%= truncate(user.bio.presence || 'No bio provided', length: 160) %>
+      </div>
 
-  <p>
-    <strong>Email:</strong>
-    <%= user.email %>
-  </p>
+      <div class="divider-h"></div>
 
-  <p>
-    <strong>Bio:</strong>
-    <%= user.bio %>
-  </p>
-
-  <p>
-    <strong>Photo url:</strong>
-    <%= user.photo_url %>
-  </p>
-
+      <div class="flex flex-wrap items-center gap-4 text-[11px] text-muted">
+        <div class="flex items-center gap-1 min-w-0">
+          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c-4.418 0-8 1.79-8 4v1h16v-1c0-2.21-3.582-4-8-4z"/></svg>
+          <span class="truncate max-w-[7rem]"><%= user.email.presence || '—' %></span>
+        </div>
+        <div class="flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span><%= user.created_at ? l(user.created_at, format: :short) : '—' %></span>
+        </div>
+        <div class="flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l2.5 2.5M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          <span>Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

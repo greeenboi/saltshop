@@ -1,1 +1,201 @@
 @import "tailwindcss";
+
+/*
+  Design tokens and template values for the app.
+  Enhanced to feel closer to a Material UI style dashboard.
+*/
+:root {
+  /* Brand / Primary palette */
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6; /* primary main */
+  --brand-600: #2563eb; /* primary dark */
+  --brand-700: #1d4ed8;
+  --brand-contrast: #ffffff;
+
+  /* Secondary (indigo-esque like MUI secondary) */
+  --secondary-50: #eef2ff;
+  --secondary-100: #e0e7ff;
+  --secondary-200: #c7d2fe;
+  --secondary-300: #a5b4fc;
+  --secondary-400: #818cf8;
+  --secondary-500: #6366f1;
+  --secondary-600: #4f46e5;
+  --secondary-700: #4338ca;
+
+  /* Semantic palettes */
+  --success-50:#ecfdf5; --success-500:#10b981; --success-600:#059669; --success-700:#047857; --success-contrast:#ffffff;
+  --info-50:#e0f2fe;    --info-500:#0ea5e9;    --info-600:#0284c7;    --info-700:#0369a1;    --info-contrast:#ffffff;
+  --warning-50:#fffbeb; --warning-500:#f59e0b;  --warning-600:#d97706;  --warning-700:#b45309;  --warning-contrast:#111827;
+  --error-50:#fef2f2;   --error-500:#ef4444;    --error-600:#dc2626;    --error-700:#b91c1c;   --error-contrast:#ffffff;
+
+  /* Neutral / UI */
+  --bg: #f3f4f6; /* gray-100 */
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --muted: #6b7280; /* gray-500 */
+  --text: #111827; /* gray-900 */
+  --subtle: #9ca3af; /* gray-400 */
+
+  /* Role badges */
+  --role-admin-bg: #fee2e2; --role-admin-text: #991b1b;
+  --role-mod-bg: #fef3c7;   --role-mod-text: #92400e;
+  --role-user-bg: #ecfdf5;  --role-user-text: #065f46;
+
+  /* Template sizes & radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Elevations (Material-esque) */
+  --shadow-1: 0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+  --shadow-2: 0 2px 4px -2px rgba(16,24,40,.06),0 4px 8px -2px rgba(16,24,40,.10);
+  --shadow-3: 0 4px 6px -2px rgba(16,24,40,.06),0 12px 16px -4px rgba(16,24,40,.10);
+  --shadow-4: 0 8px 8px -4px rgba(16,24,40,.08),0 20px 24px -4px rgba(16,24,40,.10);
+
+  --card-shadow: var(--shadow-1);
+  --card-shadow-strong: var(--shadow-3);
+  --focus-ring: 0 0 0 3px rgba(59,130,246,0.45);
+}
+
+@layer base {
+  /* Basic page defaults that cooperate with Tailwind utilities */
+  html, body { height: 100%; }
+  body {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  [data-elevated="true"] { box-shadow: var(--shadow-2); }
+  *:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+  /* Make form elements respect the design tokens by default */
+  input, textarea, select {
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(15,23,42,0.10);
+    background: var(--surface);
+  }
+}
+
+@layer components {
+  /* Primary button (used by views like the New user button) */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    background: var(--brand-600); color: var(--brand-contrast);
+    border-radius: var(--radius-sm);
+    font-weight: 600; font-size: 0.875rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: background .18s, box-shadow .18s, transform .18s;
+  }
+  .btn-primary:hover { background: var(--brand-700); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  /* Ghost button style */
+  .btn-ghost {
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.4rem .65rem; border-radius: var(--radius-sm);
+    font-size:.75rem; font-weight:500; color: var(--muted);
+    background: transparent; transition: background .18s,color .18s;
+  }
+  .btn-ghost:hover { background: rgba(0,0,0,0.03); color: var(--text); }
+
+  /* Action icons */
+  .action-icon { width:1.75rem; height:1.75rem; display:inline-flex; align-items:center; justify-content:center; border-radius: 8px; color: var(--muted); transition: background .18s, color .18s; }
+  .action-icon:hover { background: rgba(0,0,0,0.06); color: var(--text); }
+
+  /* Generic card used for user cards and small tiles */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(15,23,42,0.05);
+    overflow: hidden;
+    position: relative;
+  }
+  .card-interactive { transition: box-shadow .25s, transform .25s, border-color .25s; }
+  .card-interactive:hover { box-shadow: var(--card-shadow-strong); transform: translateY(-2px); border-color: rgba(15,23,42,0.07); }
+  .card-interactive:active { transform: translateY(-1px); }
+
+  /* Stat tile component */
+  .stat-tile { padding:1rem 1rem 1.05rem; border-radius: var(--radius-lg); background: linear-gradient(145deg,#ffffff 0%,#f1f5f9 100%); position:relative; overflow:hidden; box-shadow: var(--shadow-1); border:1px solid rgba(15,23,42,.05); }
+  .stat-tile:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 85% 15%, rgba(59,130,246,0.15), transparent 60%); opacity:.6; }
+  .stat-label { font-size:.65rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color: var(--muted); }
+  .stat-value { font-size:1.875rem; line-height:1.2; font-weight:700; color: var(--text); }
+
+  /* Small badge utilities for roles */
+  .badge {
+    display: inline-flex; align-items: center; gap:.25rem;
+    padding:0.2rem 0.55rem;
+    border-radius: 9999px;
+    font-size: 0.65rem; /* 10.4px */
+    font-weight:600;
+    letter-spacing:.03em;
+    line-height:1;
+    position:relative;
+  }
+  .badge-admin { background: var(--role-admin-bg); color: var(--role-admin-text); }
+  .badge-mod { background: var(--role-mod-bg); color: var(--role-mod-text); }
+  .badge-user { background: var(--role-user-bg); color: var(--role-user-text); }
+  .badge-tonal { background: var(--secondary-100); color: var(--secondary-600); }
+
+  /* Avatar fallback style */
+  .avatar-fallback {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 56px; height: 56px; border-radius: 9999px;
+    background: linear-gradient(135deg,#f1f5f9,#e2e8f0);
+    color: #334155; font-weight: 600; font-size: 0.95rem;
+    border: 1px solid rgba(15,23,42,0.05);
+  }
+  .avatar-ring { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--brand-200); }
+
+  /* Compact pill button used for Edit/Delete inside cards */
+  .btn-pill {
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    background: #f1f5f9;
+    color: var(--text);
+    font-weight:500;
+    transition: background .18s,color .18s;
+  }
+  .btn-pill:hover { background:#e2e8f0; }
+  .btn-pill-danger { background: var(--error-50); color: var(--error-600); }
+  .btn-pill-danger:hover { background: #fecaca; }
+
+  /* Chip component */
+  .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.25rem .6rem; background: var(--secondary-50); color: var(--secondary-700); font-size:.65rem; font-weight:500; border-radius: 14px; }
+
+  /* Divider */
+  .divider-h { height:1px; background: linear-gradient(90deg,transparent,#e2e8f0,transparent); }
+
+  /* Simple utility to visually truncate text lines nicely */
+  .line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+
+  /* Alert component for notices / flash messages */
+  .alert { display:flex; gap:.65rem; padding:.65rem .85rem; border-radius: var(--radius-md); font-size:.75rem; line-height:1.2; font-weight:500; position:relative; border:1px solid transparent; }
+  .alert-success { background: var(--success-50); color: var(--success-700); border-color: var(--success-500)/20; }
+  .alert-info { background: var(--info-50); color: var(--info-700); }
+  .alert-warning { background: var(--warning-50); color: var(--warning-700); }
+  .alert-error { background: var(--error-50); color: var(--error-700); }
+  .alert svg { width:14px; height:14px; opacity:.9; }
+}
+
+@layer utilities {
+  /* Helpful helper to use design token backgrounds in markup (when needed) */
+  .bg-brand-500 { background-color: var(--brand-500); }
+  .bg-secondary-500 { background-color: var(--secondary-500); }
+  .text-muted { color: var(--muted); }
+  .text-subtle { color: var(--subtle); }
+  .elevation-sm { box-shadow: var(--shadow-1); }
+  .elevation-md { box-shadow: var(--shadow-2); }
+  .elevation-lg { box-shadow: var(--shadow-3); }
+  .scrollbar-thin::-webkit-scrollbar { width:6px; height:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+}
