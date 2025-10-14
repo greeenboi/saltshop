@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="fixing offenses with rubocop">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="Integrate Tailwind CSS into Rails:&#10;&#10;- Added `tailwindcss-rails` and `tailwindcss-ruby` gems to the Gemfile.&#10;- Updated `Procfile.dev` to include TailwindCSS watcher.&#10;- Introduced `application.tailwind.css` with design tokens and component styles.&#10;- Enhanced `users` views for a modern UI with responsive layout and improved styling.">
+      <change afterPath="$PROJECT_DIR$/script/initial_scaffold.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile.dev" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/assets/stylesheets/application.tailwind.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/assets/stylesheets/application.tailwind.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/users/_user.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/users/_user.html.erb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/users/index.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/users/index.html.erb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/dev" beforeDir="false" afterPath="$PROJECT_DIR$/bin/dev" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/user.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +47,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "C:\\Users\\suvan\\AppData\\Roaming\\JetBrains\\RubyMine2025.2\\plugins\\Shell Script\\linux\\amd64\\shellcheck",
     "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1760466006488",
     "credentialsType org.jetbrains.plugins.ruby.remote.impl.RubyCreateRemoteInterpreterDialog$RubyCreateRemoteSdkForm": "WSL",
     "git-widget-placeholder": "main",
@@ -251,7 +246,7 @@
       <workItem from="1759823362460" duration="873000" />
       <workItem from="1759833467350" duration="1764000" />
       <workItem from="1760417219087" duration="3642000" />
-      <workItem from="1760465946975" duration="1805000" />
+      <workItem from="1760465946975" duration="3097000" />
     </task>
     <task id="LOCAL-00001" summary="idea file">
       <option name="closed" value="true" />
@@ -309,7 +304,23 @@
       <option name="project" value="LOCAL" />
       <updated>1759823808474</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Integrate Tailwind CSS into Rails:&#10;&#10;- Added `tailwindcss-rails` and `tailwindcss-ruby` gems to the Gemfile.&#10;- Updated `Procfile.dev` to include TailwindCSS watcher.&#10;- Introduced `application.tailwind.css` with design tokens and component styles.&#10;- Enhanced `users` views for a modern UI with responsive layout and improved styling.">
+      <option name="closed" value="true" />
+      <created>1760469550309</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1760469550309</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Integrate Tailwind CSS into Rails:&#10;&#10;- Added `tailwindcss-rails` and `tailwindcss-ruby` gems to the Gemfile.&#10;- Updated `Procfile.dev` to include TailwindCSS watcher.&#10;- Introduced `application.tailwind.css` with design tokens and component styles.&#10;- Enhanced `users` views for a modern UI with responsive layout and improved styling.">
+      <option name="closed" value="true" />
+      <created>1760469554720</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1760469554720</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -334,6 +345,7 @@
     <MESSAGE value="Add rubocop dependency to Gemfile.lock" />
     <MESSAGE value="Add Role and User models with CRUD functionality&#10;&#10;- Implemented `Role` and `User` models with relationships and validations.&#10;- Created database migrations for tables, including UUID primary keys.&#10;- Added controllers and views for CRUD operations.&#10;- Added tests for models, controllers, and system behavior.&#10;- Updated seed data to include sample roles and users.&#10;- Enabled `pgcrypto` extension for UUIDs.&#10;- Included bcrypt for secure password storage." />
     <MESSAGE value="fixing offenses with rubocop" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing offenses with rubocop" />
+    <MESSAGE value="Integrate Tailwind CSS into Rails:&#10;&#10;- Added `tailwindcss-rails` and `tailwindcss-ruby` gems to the Gemfile.&#10;- Updated `Procfile.dev` to include TailwindCSS watcher.&#10;- Introduced `application.tailwind.css` with design tokens and component styles.&#10;- Enhanced `users` views for a modern UI with responsive layout and improved styling." />
+    <option name="LAST_COMMIT_MESSAGE" value="Integrate Tailwind CSS into Rails:&#10;&#10;- Added `tailwindcss-rails` and `tailwindcss-ruby` gems to the Gemfile.&#10;- Updated `Procfile.dev` to include TailwindCSS watcher.&#10;- Introduced `application.tailwind.css` with design tokens and component styles.&#10;- Enhanced `users` views for a modern UI with responsive layout and improved styling." />
   </component>
 </project>
