@@ -1,16 +1,96 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Users" %>
 
-<h1>Users</h1>
-
-<div id="users">
-  <% @users.each do |user| %>
-    <%= render user %>
-    <p>
-      <%= link_to "Show this user", user %>
-    </p>
+<div class="min-h-screen px-4 sm:px-6 lg:px-8 py-8">
+  <% if notice.present? || flash[:alert].present? || flash[:error].present? || flash[:warning].present? %>
+    <div class="max-w-7xl mx-auto mb-6 space-y-2">
+      <% if notice.present? %>
+        <div class="alert alert-success" role="status">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <span><%= notice %></span>
+        </div>
+      <% end %>
+      <% if flash[:warning].present? %>
+        <div class="alert alert-warning" role="status">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          <span><%= flash[:warning] %></span>
+        </div>
+      <% end %>
+      <% if flash[:alert].present? %>
+        <div class="alert alert-info" role="status">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span><%= flash[:alert] %></span>
+        </div>
+      <% end %>
+      <% if flash[:error].present? %>
+        <div class="alert alert-error" role="status">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          <span><%= flash[:error] %></span>
+        </div>
+      <% end %>
+    </div>
   <% end %>
-</div>
 
-<%= link_to "New user", new_user_path %>
+  <!-- Page header -->
+  <header class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl font-semibold tracking-tight text-gray-900">Users</h1>
+      <p class="text-sm text-muted mt-1">Manage application user accounts, roles & basic profile info.</p>
+    </div>
+    <div class="flex items-center gap-3 self-start sm:self-auto">
+      <span class="hidden sm:inline text-xs font-medium tracking-wide uppercase text-subtle"><%= pluralize(@users.size, 'user') %></span>
+      <%= link_to 'New user', new_user_path, class: 'btn-primary shadow-sm' %>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto space-y-10">
+    <!-- Stats row -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-5" aria-label="User statistics overview">
+      <div class="stat-tile relative">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value"><%= @users.size %></div>
+      </div>
+      <div class="stat-tile relative">
+        <div class="stat-label">Admins</div>
+        <div class="stat-value"><%= @users.count { |u| u.role.to_s.downcase == 'admin' } %></div>
+      </div>
+      <div class="stat-tile relative">
+        <div class="stat-label">Recent (7d)</div>
+        <div class="stat-value"><%= @users.count { |u| u.created_at && u.created_at >= 7.days.ago } %></div>
+      </div>
+    </section>
+
+    <!-- Search & filters toolbar (placeholder) -->
+    <section class="flex flex-col gap-4" aria-label="User search and filters">
+      <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+        <div class="flex-1">
+          <div class="relative group">
+            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
+            <input id="user-search" aria-label="Search users" placeholder="Search users" class="w-full pl-11 pr-4 py-2.5 rounded-lg border border-gray-200 bg-white shadow-sm focus:border-brand-500 focus:ring-0 text-sm" />
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" class="btn-ghost text-xs">Filters</button>
+          <div class="text-[11px] text-muted">
+            Showing <span class="font-medium text-gray-700"><%= @users.size %></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User cards grid -->
+    <section aria-label="Users list" class="space-y-4">
+      <% if @users.any? %>
+        <div id="users" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @users.each do |user| %>
+            <%= render user %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="card p-10 text-center">
+          <p class="text-muted mb-4">No users yet. Create one with the button above.</p>
+          <%= link_to 'Create first user', new_user_path, class: 'btn-primary' %>
+        </div>
+      <% end %>
+    </section>
+  </main>
+</div>
