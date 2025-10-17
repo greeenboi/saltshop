@@ -1,15 +1,63 @@
 <% content_for :title, "Showing product" %>
 
-<div class="md:w-2/3 w-full">
+<div class="max-w-5xl mx-auto p-6">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p id="notice" class="py-2 px-3 bg-green-50 mb-5 text-green-600 font-medium rounded-md inline-block"><%= notice %></p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing product</h1>
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-100 p-6 md:flex md:gap-8">
+    <!-- Images -->
+    <div class="product-images md:w-1/2 w-full flex items-center justify-center">
+      <% if @product.respond_to?(:image_url) && @product.image_url.present? %>
+        <%= image_tag @product.image_url, alt: @product.name, class: "w-full h-80 object-cover rounded-md" %>
+      <% else %>
+        <div class="w-full h-80 bg-gray-50 border border-dashed border-gray-200 rounded-md flex items-center justify-center text-gray-400">
+          No image
+        </div>
+      <% end %>
+    </div>
 
-  <%= render @product %>
+    <!-- Info -->
+    <div class="product-info md:w-1/2 w-full mt-6 md:mt-0 flex flex-col">
+      <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @product.name %></h1>
+      <p class="text-2xl font-bold text-gray-900 mb-4"><%= number_to_currency(@product.price) %></p>
 
-  <%= link_to "Edit this product", edit_product_path(@product), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to products", products_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this product", @product, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+      <div class="description mb-4">
+        <h2 class="text-sm font-medium text-gray-500 mb-2">Description</h2>
+        <p class="text-gray-700"><%= simple_format(@product.description) %></p>
+      </div>
+
+      <div class="stock-info mt-4">
+        <% if @product.stock && @product.stock > 0 %>
+          <p class="text-sm text-green-600 font-medium mb-3">In Stock: <span class="font-semibold text-gray-800"><%= @product.stock %></span></p>
+
+          <%= form_with url: cart_items_path, method: :post, local: true do %>
+            <%= hidden_field_tag 'cart_item[product_id]', @product.id %>
+
+            <div class="flex items-center gap-3 mb-4">
+              <label for="quantity" class="text-sm text-gray-600">Quantity</label>
+              <%= number_field_tag 'cart_item[quantity]', 1, min: 1, max: @product.stock, id: "quantity", class: "w-20 px-2 py-1 border rounded-md text-center" %>
+            </div>
+
+            <div>
+              <%= submit_tag "Add to Cart", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md font-medium" %>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-red-500 font-medium">Out of Stock</p>
+        <% end %>
+      </div>
+
+      <div class="mt-6 border-t pt-4 flex flex-col sm:flex-row gap-2">
+        <div class="flex gap-2">
+          <%= link_to "Edit this product", edit_product_path(@product), class: "text-sm px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+          <%= link_to "Back to products", products_path, class: "text-sm px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+        </div>
+
+        <div class="sm:ml-auto">
+          <%= button_to "Destroy this product", @product, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-sm px-3 py-2 rounded-md bg-red-600 hover:bg-red-500 text-white font-medium" %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
