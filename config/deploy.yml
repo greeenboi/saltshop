@@ -2,7 +2,7 @@
 service: saltshop
 
 # Name of the container image.
-image: your-user/saltshop
+image: greeenboi/saltshop
 
 # Deploy to these servers.
 servers:

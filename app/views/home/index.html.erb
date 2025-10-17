@@ -1,0 +1,19 @@
+<div class="hero-section">
+  <h1>Welcome to Salt Shop</h1>
+  <p>Your premium source for quality products</p>
+  <a href="/products" class="btn btn-primary">Shop Now</a>
+</div>
+
+<div class="featured-products">
+  <h2>Featured Products</h2>
+  <div class="product-grid">
+    <% @featured_products.each do |product| %>
+      <div class="product-card">
+        <h3><%= product.name %></h3>
+        <p class="price">$<%= product.price %></p>
+        <p><%= truncate(product.description, length: 100) %></p>
+        <%= button_to "Add to Cart", cart_items_path(product_id: product.id), method: :post, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
