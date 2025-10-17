@@ -1,0 +1,25 @@
+<div class="admin-dashboard">
+  <h1>Admin Dashboard</h1>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <h2>Products</h2>
+      <p><%= Product.count %> products in inventory</p>
+      <p><%= Product.where('stock <= 5').count %> products low on stock</p>
+      <%= link_to "Manage Products", admin_products_path, class: "btn btn-primary" %>
+    </div>
+
+    <div class="dashboard-card">
+      <h2>Orders</h2>
+      <p><%= Order.count %> total orders</p>
+      <p><%= Order.where(status: 'pending').count %> pending orders</p>
+      <%= link_to "Manage Orders", admin_orders_path, class: "btn btn-primary" %>
+    </div>
+
+    <div class="dashboard-card">
+      <h2>Customers</h2>
+      <p><%= Customer.count %> registered customers</p>
+      <%= link_to "Manage Customers", admin_customers_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>

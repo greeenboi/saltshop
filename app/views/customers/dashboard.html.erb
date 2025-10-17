@@ -1,0 +1,30 @@
+<div class="dashboard-container">
+  <h1>My Account Dashboard</h1>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <h2>Your Information</h2>
+      <p><strong>Name:</strong> <%= current_user.name %></p>
+      <p><strong>Email:</strong> <%= current_user.email %></p>
+      <%= link_to "Edit Profile", edit_user_path(current_user), class: "btn btn-secondary" %>
+    </div>
+
+    <div class="dashboard-card">
+      <h2>Order History</h2>
+      <% if @orders.any? %>
+        <div class="order-list">
+          <% @orders.each do |order| %>
+            <div class="order-item">
+              <p>Order #<%= order.id %> - <%= order.created_at.strftime("%B %d, %Y") %></p>
+              <p>Status: <span class="status-<%= order.status %>"><%= order.status.capitalize %></span></p>
+              <p>Total: $<%= order.order_items.sum { |item| item.price * item.quantity } %></p>
+              <%= link_to "View Details", order_path(order), class: "btn btn-sm btn-info" %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p>You haven't placed any orders yet.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
