@@ -1,0 +1,131 @@
+<% content_for :title, "Order ##{@order.id} - Admin" %>
+
+<div class="max-w-5xl mx-auto p-6">
+  <% if notice.present? %>
+    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded">
+      <p class="text-green-700 font-medium"><%= notice %></p>
+    </div>
+  <% end %>
+
+  <% if alert.present? %>
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+      <p class="text-red-700 font-medium"><%= alert %></p>
+    </div>
+  <% end %>
+
+  <div class="mb-6 flex items-center justify-between">
+    <%= link_to admin_orders_path, class: "flex items-center text-gray-600 hover:text-gray-900" do %>
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to Orders
+    <% end %>
+  </div>
+
+  <!-- Order Header -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Order #<%= @order.id.to_s.first(8) %></h1>
+        <p class="text-gray-600 mt-1"><%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+      </div>
+      <span class="px-4 py-2 rounded-full text-sm font-semibold
+        <%= @order.status == 'pending' ? 'bg-yellow-100 text-yellow-800' :
+            @order.status == 'processing' ? 'bg-blue-100 text-blue-800' :
+            @order.status == 'shipped' ? 'bg-purple-100 text-purple-800' :
+            @order.status == 'delivered' ? 'bg-green-100 text-green-800' :
+            'bg-gray-100 text-gray-800' %>">
+        <%= @order.status.titleize %>
+      </span>
+    </div>
+
+    <!-- Update Order Status -->
+    <div class="border-t pt-4">
+      <%= form_with model: @order, url: admin_order_path(@order), method: :patch, class: "flex items-center gap-3" do |f| %>
+        <label class="text-sm font-medium text-gray-700">Update Status:</label>
+        <%= f.select :status,
+          [['Pending', 'pending'], ['Processing', 'processing'], ['Shipped', 'shipped'], ['Delivered', 'delivered'], ['Cancelled', 'cancelled']],
+          { selected: @order.status },
+          class: "px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" %>
+        <%= f.submit "Update Status", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium cursor-pointer transition" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-6 mb-6">
+    <!-- Customer Information -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-semibold mb-3">Customer</h2>
+      <div>
+        <p class="font-medium text-gray-900"><%= @order.customer.user.name %></p>
+        <p class="text-sm text-gray-600"><%= @order.customer.user.email %></p>
+      </div>
+    </div>
+
+    <!-- Your Revenue -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-semibold mb-3">Your Revenue</h2>
+      <p class="text-2xl font-bold text-green-600">
+        <%= number_to_currency(@admin_order_items.sum { |item| item.price * item.quantity }) %>
+      </p>
+      <p class="text-sm text-gray-500 mt-1">From <%= pluralize(@admin_order_items.count, 'item') %></p>
+    </div>
+
+    <!-- Order Stats -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-semibold mb-3">Order Stats</h2>
+      <p class="text-sm text-gray-600">Total Items: <span class="font-medium text-gray-900"><%= @order.order_items.count %></span></p>
+      <p class="text-sm text-gray-600">Your Items: <span class="font-medium text-gray-900"><%= @admin_order_items.count %></span></p>
+      <p class="text-sm text-gray-600 mt-2">Order Total: <span class="font-medium text-gray-900"><%= number_to_currency(@order.calculate_total) %></span></p>
+    </div>
+  </div>
+
+  <!-- Your Products in This Order -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold mb-4">Your Products in This Order</h2>
+
+    <div class="space-y-4">
+      <% @admin_order_items.each do |item| %>
+        <div class="flex gap-4 items-center pb-4 border-b last:border-b-0">
+          <div class="w-20 h-20 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden">
+            <% if item.product.respond_to?(:image_url) && item.product.image_url.present? %>
+              <%= image_tag item.product.image_url, alt: item.product.name, class: "w-full h-full object-cover" %>
+            <% else %>
+              <span class="text-xs text-gray-400">No image</span>
+            <% end %>
+          </div>
+
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-900"><%= item.product.name %></h3>
+            <p class="text-sm text-gray-500"><%= truncate(item.product.description, length: 80) %></p>
+            <div class="mt-2 flex items-center gap-4 text-sm">
+              <span class="text-gray-600">Qty: <span class="font-medium"><%= item.quantity %></span></span>
+              <span class="text-gray-600">Price: <span class="font-medium"><%= number_to_currency(item.price) %></span></span>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <p class="text-lg font-semibold text-gray-900"><%= number_to_currency(item.price * item.quantity) %></p>
+            <p class="text-sm text-gray-500">Subtotal</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-6 pt-4 border-t">
+      <div class="flex justify-between items-center">
+        <span class="text-lg font-semibold text-gray-900">Your Total Revenue</span>
+        <span class="text-2xl font-bold text-green-600">
+          <%= number_to_currency(@admin_order_items.sum { |item| item.price * item.quantity }) %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="mt-6 flex gap-4">
+    <%= link_to "Back to Orders", admin_orders_path, class: "flex-1 text-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition" %>
+    <%= link_to "Dashboard", admin_path, class: "flex-1 text-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition" %>
+  </div>
+</div>
+

@@ -1,0 +1,91 @@
+<% content_for :title, "Orders - Admin" %>
+
+<div class="max-w-7xl mx-auto p-6">
+  <div class="mb-8 flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-bold text-gray-900">Orders</h1>
+      <p class="text-gray-600 mt-2">Manage orders for your products</p>
+    </div>
+    <%= link_to "Back to Dashboard", admin_path, class: "px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition" %>
+  </div>
+
+  <% if @orders.any? %>
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Items</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Revenue</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @orders.each do |order| %>
+              <tr class="hover:bg-gray-50 transition">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="font-mono text-sm font-medium text-gray-900">#<%= order.id.to_s.first(8) %></span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div>
+                    <p class="text-sm font-medium text-gray-900"><%= order.customer.user.name %></p>
+                    <p class="text-sm text-gray-500"><%= order.customer.user.email %></p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <p class="text-sm text-gray-900"><%= order.created_at.strftime("%b %d, %Y") %></p>
+                  <p class="text-sm text-gray-500"><%= order.created_at.strftime("%I:%M %p") %></p>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm text-gray-900">
+                    <%= order.order_items.joins(:product).where(products: { admin_id: @admin.id }).count %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm font-semibold text-gray-900">
+                    <%= number_to_currency(
+                      order.order_items.joins(:product)
+                           .where(products: { admin_id: @admin.id })
+                           .sum('order_items.price * order_items.quantity')
+                    ) %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-3 py-1 rounded-full text-xs font-semibold
+                    <%= order.status == 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        order.status == 'processing' ? 'bg-blue-100 text-blue-800' :
+                        order.status == 'shipped' ? 'bg-purple-100 text-purple-800' :
+                        order.status == 'delivered' ? 'bg-green-100 text-green-800' :
+                        'bg-gray-100 text-gray-800' %>">
+                    <%= order.status.titleize %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <%= link_to "View", admin_order_path(order), class: "text-indigo-600 hover:text-indigo-900 font-medium" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <%= paginate @orders %>
+    </div>
+  <% else %>
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-12 text-center">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      <h2 class="text-2xl font-semibold text-gray-900 mb-2">No Orders Yet</h2>
+      <p class="text-gray-600 mb-6">You haven't received any orders for your products yet.</p>
+      <%= link_to "Manage Products", admin_products_path, class: "inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition" %>
+    </div>
+  <% end %>
+</div>
+

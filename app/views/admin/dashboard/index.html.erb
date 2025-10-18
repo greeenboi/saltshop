@@ -1,0 +1,133 @@
+<% content_for :title, "Admin Dashboard" %>
+
+<div class="max-w-7xl mx-auto p-6">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900">Business Dashboard</h1>
+    <p class="text-gray-600 mt-2">Welcome back, <%= current_user.name %>!</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Total Products</p>
+          <p class="text-3xl font-bold text-gray-900"><%= @total_products %></p>
+        </div>
+        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+        </div>
+      </div>
+      <%= link_to "Manage Products", admin_products_path, class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium mt-3 inline-block" %>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Pending Orders</p>
+          <p class="text-3xl font-bold text-gray-900"><%= @pending_orders %></p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+      <%= link_to "View Orders", admin_orders_path, class: "text-sm text-yellow-600 hover:text-yellow-700 font-medium mt-3 inline-block" %>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Total Revenue</p>
+          <p class="text-3xl font-bold text-gray-900"><%= number_to_currency(@total_revenue) %></p>
+        </div>
+        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-gray-900">Recent Orders</h2>
+        <%= link_to "View All", admin_orders_path, class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+      </div>
+    </div>
+
+    <% if @orders.any? %>
+      <div class="divide-y divide-gray-200">
+        <% @orders.each do |order| %>
+          <div class="p-6 hover:bg-gray-50 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h3 class="font-semibold text-gray-900">Order #<%= order.id.to_s.first(8) %></h3>
+                <p class="text-sm text-gray-500"><%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold
+                <%= order.status == 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                    order.status == 'processing' ? 'bg-blue-100 text-blue-800' :
+                    order.status == 'shipped' ? 'bg-purple-100 text-purple-800' :
+                    order.status == 'delivered' ? 'bg-green-100 text-green-800' :
+                    'bg-gray-100 text-gray-800' %>">
+                <%= order.status.titleize %>
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600">
+                  Customer: <span class="font-medium"><%= order.customer.user.name %></span>
+                </p>
+                <p class="text-sm text-gray-600">
+                  Your Items: <span class="font-medium"><%= order.order_items.joins(:product).where(products: { admin_id: @admin.id }).count %></span>
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-semibold text-gray-900">
+                  <%= number_to_currency(
+                    order.order_items.joins(:product)
+                         .where(products: { admin_id: @admin.id })
+                         .sum('order_items.price * order_items.quantity')
+                  ) %>
+                </p>
+                <%= link_to "View Details", admin_order_path(order), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="p-12 text-center">
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">No Orders Yet</h3>
+        <p class="text-gray-600">You haven't received any orders for your products yet.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Add New Product</h3>
+      <p class="text-sm text-gray-600 mb-4">List a new product to start receiving orders.</p>
+      <%= link_to "Create Product", new_admin_product_path, class: "inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition" %>
+    </div>
+
+    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Manage Inventory</h3>
+      <p class="text-sm text-gray-600 mb-4">Update stock levels and product details.</p>
+      <%= link_to "View Products", admin_products_path, class: "inline-block px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition" %>
+    </div>
+  </div>
+</div>
+
