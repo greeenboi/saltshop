@@ -2,8 +2,8 @@
 
 one:
   customer: one
-  status: MyString
+  status: pending
 
 two:
   customer: two
-  status: MyString
+  status: delivered

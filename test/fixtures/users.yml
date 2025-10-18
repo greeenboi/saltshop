@@ -1,21 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  username: MyText
-  password: MyText
-  role: 
+  username: user_one
+  password_digest: <%= BCrypt::Password.create('password123', cost: 4) %>
+  role: one
   date_created: 2025-10-07 03:06:46
-  name: MyText
-  email: MyText
-  bio: MyText
-  photo_url: MyText
+  name: User One
+  email: user.one@example.com
+  bio: Test user one bio
+  photo_url: https://example.com/photo1.jpg
 
 two:
-  username: MyText
-  password: MyText
-  role: 
+  username: user_two
+  password_digest: <%= BCrypt::Password.create('password123', cost: 4) %>
+  role: two
   date_created: 2025-10-07 03:06:46
-  name: MyText
-  email: MyText
-  bio: MyText
-  photo_url: MyText
+  name: User Two
+  email: user.two@example.com
+  bio: Test user two bio
+  photo_url: https://example.com/photo2.jpg
