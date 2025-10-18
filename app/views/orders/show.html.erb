@@ -1,15 +1,119 @@
-<% content_for :title, "Showing order" %>
+<% content_for :title, "Order ##{@order.id}" %>
 
-<div class="md:w-2/3 w-full">
+<div class="max-w-4xl mx-auto p-6">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded">
+      <p class="text-green-700 font-medium"><%= notice %></p>
+    </div>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing order</h1>
+  <!-- Order Success Header -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-8 mb-6 text-center">
+    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Order Placed Successfully!</h1>
+    <p class="text-gray-600 mb-4">Thank you for your order. We've received it and will process it shortly.</p>
+    <div class="inline-block bg-gray-100 px-4 py-2 rounded-lg">
+      <span class="text-sm text-gray-600">Order ID:</span>
+      <span class="font-mono font-semibold text-gray-900 ml-2">#<%= @order.id.to_s.first(8) %></span>
+    </div>
+  </div>
 
-  <%= render @order %>
+  <!-- Order Details -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Order Details</h2>
 
-  <%= link_to "Edit this order", edit_order_path(@order), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to orders", orders_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this order", @order, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+    <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+      <div>
+        <p class="text-gray-500">Order Date</p>
+        <p class="font-medium text-gray-900"><%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+      </div>
+      <div>
+        <p class="text-gray-500">Status</p>
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+          <%= @order.status == 'pending' ? 'bg-yellow-100 text-yellow-800' :
+              @order.status == 'processing' ? 'bg-blue-100 text-blue-800' :
+              @order.status == 'shipped' ? 'bg-purple-100 text-purple-800' :
+              @order.status == 'delivered' ? 'bg-green-100 text-green-800' :
+              'bg-gray-100 text-gray-800' %>">
+          <%= @order.status.titleize %>
+        </span>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="border-t pt-4">
+      <h3 class="font-semibold mb-3">Items Ordered</h3>
+      <div class="space-y-4">
+        <% @order.order_items.each do |item| %>
+          <div class="flex gap-4 items-center pb-4 border-b last:border-b-0">
+            <div class="w-20 h-20 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden">
+              <% if item.product.respond_to?(:image_url) && item.product.image_url.present? %>
+                <%= image_tag item.product.image_url, alt: item.product.name, class: "w-full h-full object-cover" %>
+              <% else %>
+                <span class="text-xs text-gray-400">No image</span>
+              <% end %>
+            </div>
+
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900"><%= item.product.name %></h4>
+              <p class="text-sm text-gray-500">Quantity: <%= item.quantity %> × <%= number_to_currency(item.price) %></p>
+              <% if item.product.admin %>
+                <p class="text-xs text-gray-400 mt-1">Sold by: <%= item.product.admin.user_name %></p>
+              <% end %>
+            </div>
+
+            <div class="text-right">
+              <p class="font-semibold text-gray-900"><%= number_to_currency(item.price * item.quantity) %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="border-t mt-4 pt-4">
+      <div class="space-y-2 text-sm">
+        <% subtotal = @order.order_items.sum { |item| item.price * item.quantity } %>
+        <% tax = (subtotal * 0.1).round(2) %>
+        <% total = (subtotal + tax).round(2) %>
+
+        <div class="flex justify-between text-gray-700">
+          <span>Subtotal</span>
+          <span><%= number_to_currency(subtotal) %></span>
+        </div>
+        <div class="flex justify-between text-gray-700">
+          <span>Tax (10%)</span>
+          <span><%= number_to_currency(tax) %></span>
+        </div>
+        <div class="flex justify-between text-gray-700">
+          <span>Shipping</span>
+          <span class="text-green-600 font-medium">FREE</span>
+        </div>
+        <div class="flex justify-between font-bold text-lg text-gray-900 border-t pt-2">
+          <span>Total</span>
+          <span><%= number_to_currency(total) %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Information -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Shipping Information</h2>
+    <div>
+      <p class="font-medium text-gray-900"><%= @order.customer.user.name %></p>
+      <p class="text-gray-600"><%= @order.customer.user.email %></p>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex gap-4">
+    <%= link_to "View All Orders", orders_path, class: "flex-1 text-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition" %>
+    <%= link_to "Continue Shopping", products_path, class: "flex-1 text-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition" %>
+  </div>
 </div>
+

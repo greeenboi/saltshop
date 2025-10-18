@@ -1,0 +1,99 @@
+<% content_for :title, "Checkout" %>
+
+<div class="max-w-5xl mx-auto p-6">
+  <h1 class="font-bold text-4xl mb-8">Checkout</h1>
+
+  <div class="md:flex md:gap-8">
+    <!-- Order Review -->
+    <div class="md:w-2/3 w-full">
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Review Your Order</h2>
+
+        <div class="space-y-4">
+          <% @cart.cart_items.each do |item| %>
+            <div class="flex gap-4 items-center border-b last:border-b-0 pb-4">
+              <div class="w-20 h-20 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden">
+                <% if item.product.respond_to?(:image_url) && item.product.image_url.present? %>
+                  <%= image_tag item.product.image_url, alt: item.product.name, class: "w-full h-full object-cover" %>
+                <% else %>
+                  <span class="text-xs text-gray-400">No image</span>
+                <% end %>
+              </div>
+
+              <div class="flex-1">
+                <h3 class="font-medium text-gray-900"><%= item.product.name %></h3>
+                <p class="text-sm text-gray-500">Quantity: <%= item.quantity %></p>
+              </div>
+
+              <div class="text-right">
+                <p class="font-semibold text-gray-900"><%= number_to_currency(item.product.price * item.quantity) %></p>
+                <p class="text-sm text-gray-500"><%= number_to_currency(item.product.price) %> each</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Shipping Information -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+        <h2 class="text-2xl font-semibold mb-4">Shipping Information</h2>
+
+        <div class="space-y-4">
+          <div>
+            <p class="font-medium text-gray-900"><%= current_user.name %></p>
+            <p class="text-gray-600"><%= current_user.email %></p>
+          </div>
+
+          <div class="text-sm text-gray-500">
+            <p>Your order will be processed and shipped to your registered address.</p>
+            <p class="mt-2">You will receive order confirmation and tracking details via email.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="md:w-1/3 w-full mt-6 md:mt-0">
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 sticky top-6">
+        <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+
+        <div class="space-y-3 text-sm mb-6">
+          <div class="flex justify-between text-gray-700">
+            <span>Subtotal</span>
+            <span><%= number_to_currency(@subtotal) %></span>
+          </div>
+
+          <div class="flex justify-between text-gray-700">
+            <span>Tax (10%)</span>
+            <span><%= number_to_currency(@tax) %></span>
+          </div>
+
+          <div class="flex justify-between text-gray-700">
+            <span>Shipping</span>
+            <span class="text-green-600 font-medium">FREE</span>
+          </div>
+
+          <div class="border-t pt-3 flex justify-between font-bold text-lg text-gray-900">
+            <span>Total</span>
+            <span><%= number_to_currency(@total) %></span>
+          </div>
+        </div>
+
+        <%= form_with url: checkout_path, method: :post do |f| %>
+          <%= f.hidden_field :total_amount, value: @total %>
+
+          <div class="space-y-3">
+            <%= f.submit "Place Order", class: "w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-200 cursor-pointer" %>
+
+            <%= link_to "Back to Cart", cart_path, class: "w-full block text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition" %>
+          </div>
+        <% end %>
+
+        <div class="mt-6 text-xs text-gray-500 text-center">
+          <p>By placing this order, you agree to our terms and conditions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
