@@ -83,6 +83,12 @@ class CartItemsController < ApplicationController
       redirect_to cart_path, alert: "Cart item not found." unless @cart_item
     end
 
+    def ensure_cart_item_belongs_to_current_user
+      return if @cart_item&.cart&.customer&.user_id == current_user.id
+
+      redirect_to root_path, alert: "Not authorized."
+    end
+
     # Only allow a list of trusted parameters through.
     def cart_item_params
       # Ensure :cart_item is present and only allow the listed attributes
