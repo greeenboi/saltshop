@@ -10,7 +10,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1 or /orders/1.json
   def show
-    unless @order.customer.user_id == current_user.id || current_user.role&.name == 'admin'
+    unless @order.customer.user_id == current_user.id || current_user.role&.name == "admin"
       redirect_to root_path, alert: "You are not authorized to view this order."
     end
   end

@@ -31,7 +31,7 @@ class CartItemsController < ApplicationController
     return redirect_back fallback_location: products_path, alert: "Product not found." unless product
 
     quantity = extract_quantity(params) || 1
-    quantity = [quantity.to_i, 1].max
+    quantity = [ quantity.to_i, 1 ].max
 
     if product.stock < quantity
       return redirect_to product_path(product), alert: "Not enough stock available."
@@ -92,7 +92,7 @@ class CartItemsController < ApplicationController
     def extract_quantity(params_obj)
       if params_obj[:quantity].present?
         params_obj[:quantity]
-      elsif params_obj[:cart_item].respond_to?(:[] ) && params_obj[:cart_item][:quantity].present?
+      elsif params_obj[:cart_item].respond_to?(:[]) && params_obj[:cart_item][:quantity].present?
         params_obj[:cart_item][:quantity]
       end
     end

@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction.">
+    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="Paginate products in index view and configure Kaminari&#10;&#10;- Added Kaminari gem for pagination.&#10;- Configured Kaminari with default settings in `kaminari_config.rb`.&#10;- Updated `ProductsController` to paginate products with 12 items per page.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/cart_items_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/cart_items_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/carts_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/carts_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/customers_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/customers_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/orders_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/orders_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/users_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/users_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -270,7 +264,7 @@
       <workItem from="1760688016925" duration="678000" />
       <workItem from="1760690943206" duration="1150000" />
       <workItem from="1760728808000" duration="1361000" />
-      <workItem from="1760784050908" duration="11063000" />
+      <workItem from="1760784050908" duration="11737000" />
     </task>
     <task id="LOCAL-00001" summary="idea file">
       <option name="closed" value="true" />
@@ -384,7 +378,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760692095238</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Add admin and customer dashboards, improve cart workflow, and update order management&#10;&#10;- Created `DashboardController` for admin stats (products, orders, customers).&#10;- Implemented `HomeController` for featured products on homepage.&#10;- Enhanced `CartItemsController` with better stock validations and user checks.&#10;- Updated `OrdersController` to manage order creation with transactions.&#10;- Added role-specific behavior in `UsersController` for user creation and roles.&#10;- Adjusted routes for streamlined navigation including dashboards, carts, and orders.">
+      <option name="closed" value="true" />
+      <created>1760807120614</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1760807120614</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Paginate products in index view and configure Kaminari&#10;&#10;- Added Kaminari gem for pagination.&#10;- Configured Kaminari with default settings in `kaminari_config.rb`.&#10;- Updated `ProductsController` to paginate products with 12 items per page.">
+      <option name="closed" value="true" />
+      <created>1760807686105</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1760807686105</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -415,6 +425,8 @@
     <MESSAGE value="Redesign product views:&#10;&#10;- Updated product index with a responsive grid layout and improved styling.&#10;- Enhanced product show page with a cleaner layout, stock indicators, and add-to-cart functionality.&#10;- Improved overall UI consistency using Tailwind CSS components." />
     <MESSAGE value="Add dashboards for customers and admins&#10;&#10;- Created `customers/dashboard.html.erb` with account info and order history.&#10;- Created `admins/dashboard.html.erb` with product, order, and customer management summaries." />
     <MESSAGE value="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction." />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction." />
+    <MESSAGE value="Add admin and customer dashboards, improve cart workflow, and update order management&#10;&#10;- Created `DashboardController` for admin stats (products, orders, customers).&#10;- Implemented `HomeController` for featured products on homepage.&#10;- Enhanced `CartItemsController` with better stock validations and user checks.&#10;- Updated `OrdersController` to manage order creation with transactions.&#10;- Added role-specific behavior in `UsersController` for user creation and roles.&#10;- Adjusted routes for" />
+    <MESSAGE value="Paginate products in index view and configure Kaminari&#10;&#10;- Added Kaminari gem for pagination.&#10;- Configured Kaminari with default settings in `kaminari_config.rb`.&#10;- Updated `ProductsController` to paginate products with 12 items per page." />
+    <option name="LAST_COMMIT_MESSAGE" value="Paginate products in index view and configure Kaminari&#10;&#10;- Added Kaminari gem for pagination.&#10;- Configured Kaminari with default settings in `kaminari_config.rb`.&#10;- Updated `ProductsController` to paginate products with 12 items per page." />
   </component>
 </project>

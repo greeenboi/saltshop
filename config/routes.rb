@@ -10,38 +10,38 @@ Rails.application.routes.draw do
   resources :roles
 
   # Root path
-  root 'home#index'
+  root "home#index"
 
   # Authentication routes
-  get '/login', to: 'sessions#new'
-  post '/login', to: 'sessions#create'
-  delete '/logout', to: 'sessions#destroy'
+  get "/login", to: "sessions#new"
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
 
   # User registration
-  get '/signup', to: 'users#new'
-  resources :users, only: [:create, :edit, :update]
+  get "/signup", to: "users#new"
+  resources :users, only: [ :create, :edit, :update ]
 
   # Product browsing
-  resources :products, only: [:index, :show]
+  resources :products, only: [ :index, :show ]
 
   # Shopping cart
-  resource :cart, only: [:show]
-  resources :cart_items, only: [:create, :update, :destroy]
+  resource :cart, only: [ :show ]
+  resources :cart_items, only: [ :create, :update, :destroy ]
 
   # Checkout and orders
-  get '/checkout', to: 'checkouts#new'
-  post '/checkout', to: 'checkouts#create'
-  resources :orders, only: [:index, :show, :create]
+  get "/checkout", to: "checkouts#new"
+  post "/checkout", to: "checkouts#create"
+  resources :orders, only: [ :index, :show, :create ]
 
   # Customer dashboard
-  get '/dashboard', to: 'customers#dashboard'
+  get "/dashboard", to: "customers#dashboard"
 
   # Admin routes
   namespace :admin do
-    get '/', to: 'dashboard#index'
+    get "/", to: "dashboard#index"
     resources :products
-    resources :orders, only: [:index, :show, :update]
-    resources :customers, only: [:index, :show]
+    resources :orders, only: [ :index, :show, :update ]
+    resources :customers, only: [ :index, :show ]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

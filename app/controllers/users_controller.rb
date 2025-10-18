@@ -21,8 +21,8 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
-    role_name = user_params.delete(:role).presence || 'user'
-    role = Role.find_by(name: role_name) || Role.find_by(name: 'user')
+    role_name = user_params.delete(:role).presence || "user"
+    role = Role.find_by(name: role_name) || Role.find_by(name: "user")
 
     @user = User.new(user_params)
     @user.role = role
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
       begin
         ActiveRecord::Base.transaction do
           @user.save!
-          if role&.name&.downcase == 'admin'
+          if role&.name&.downcase == "admin"
             Admin.create!(user: @user)
           else
             Customer.create!(user: @user)
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
       rescue ActiveRecord::RecordInvalid => e
         # Transaction rolled back
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: { errors: @user.errors.full_messages + [e.message] }, status: :unprocessable_entity }
+        format.json { render json: { errors: @user.errors.full_messages + [ e.message ] }, status: :unprocessable_entity }
       end
     end
   end
