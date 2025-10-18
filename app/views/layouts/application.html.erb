@@ -20,9 +20,43 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+
+    <!-- Alpine.js for dropdown functionality -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-gray-50" x-data="{ mobileMenuOpen: false }">
+    <%= render "shared/navbar" %>
+
+    <main class="min-h-screen">
+      <%= yield %>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-12">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-4">SaltShop</h3>
+            <p class="text-gray-400 text-sm">Your trusted marketplace for quality products from verified sellers.</p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul class="space-y-2 text-sm">
+              <li><%= link_to "Products", products_path, class: "text-gray-400 hover:text-white transition" %></li>
+              <% if logged_in? && current_user.role&.name == 'admin' %>
+                <li><%= link_to "Seller Dashboard", admin_root_path, class: "text-gray-400 hover:text-white transition" %></li>
+              <% end %>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Support</h3>
+            <p class="text-gray-400 text-sm">Need help? Contact us at support@saltshop.com</p>
+          </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+          <p>&copy; <%= Time.current.year %> SaltShop. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
