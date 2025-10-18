@@ -1,58 +1,47 @@
 Rails.application.routes.draw do
+  # Resources that aren't directly accessible (used internally)
   resources :order_items
-  resources :orders
   resources :cart_items
-  resources :carts
-  resources :admins
-  resources :customers
-  resources :products
-  resources :users
-  resources :roles
 
   # Root path
   root "home#index"
 
   # Authentication routes
-  get "/login", to: "sessions#new"
+  get "/login", to: "sessions#new", as: :login
   post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
+  delete "/logout", to: "sessions#destroy", as: :logout
 
   # User registration
-  get "/signup", to: "users#new"
+  get "/signup", to: "users#new", as: :signup
   resources :users, only: [ :create, :edit, :update ]
 
-  # Product browsing
+  # Public product browsing
   resources :products, only: [ :index, :show ]
 
   # Shopping cart
-  resource :cart, only: [ :show ]
+  resource :cart, only: [ :show ], controller: :carts
   resources :cart_items, only: [ :create, :update, :destroy ]
 
   # Checkout and orders
-  get "/checkout", to: "checkouts#new"
-  post "/checkout", to: "checkouts#create"
+  get "/checkout", to: "checkouts#new", as: :checkout
+  post "/checkout", to: "checkouts#create", as: :checkout
   resources :orders, only: [ :index, :show, :create ]
 
-  # Customer dashboard
-  get "/dashboard", to: "customers#dashboard"
+  # Customer dashboard (optional - can be removed if not used)
+  get "/dashboard", to: "customers#dashboard", as: :customer_dashboard
 
-  # Admin routes
+  # Admin routes (Business Owner Dashboard)
   namespace :admin do
-    get "/", to: "dashboard#index"
-    resources :products
-    resources :orders, only: [ :index, :show, :update ]
-    resources :customers, only: [ :index, :show ]
+    root to: "dashboard#index"
+    resources :products, controller: "products"
+    resources :orders, only: [ :index, :show, :update ], controller: "orders"
+    resources :customers, only: [ :index, :show ], controller: "customers"
   end
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
+  # PWA routes (commented out by default)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
