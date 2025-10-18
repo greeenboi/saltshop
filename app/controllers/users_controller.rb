@@ -21,7 +21,8 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
-    role_name = user_params.delete(:role).presence || "user"
+    # Extract role_name from params before building user
+    role_name = params[:user]&.delete(:role).presence || "user"
     role = Role.find_by(name: role_name) || Role.find_by(name: "user")
 
     @user = User.new(user_params)
@@ -80,6 +81,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :username, :password, :role, :date_created, :name, :email, :bio, :photo_url ])
+      params.expect(user: [ :username, :password, :password_confirmation, :date_created, :name, :email, :bio, :photo_url ])
     end
 end
