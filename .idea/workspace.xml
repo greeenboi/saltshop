@@ -4,15 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="Redesign product views:&#10;&#10;- Updated product index with a responsive grid layout and improved styling.&#10;- Enhanced product show page with a cleaner layout, stock indicators, and add-to-cart functionality.&#10;- Improved overall UI consistency using Tailwind CSS components.">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+    <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/cart_items_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/cart_items_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/carts_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/carts_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/customers_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/customers_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/orders_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/orders_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/users_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/users_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="ERB File" />
+        <option value="Ruby File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -48,7 +60,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SHELLCHECK.PATH": "C:\\Users\\suvan\\AppData\\Roaming\\JetBrains\\RubyMine2025.2\\plugins\\Shell Script\\linux\\amd64\\shellcheck",
-    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1760691001388",
+    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1760784110813",
     "credentialsType org.jetbrains.plugins.ruby.remote.impl.RubyCreateRemoteInterpreterDialog$RubyCreateRemoteSdkForm": "WSL",
     "git-widget-placeholder": "main",
     "javascript.nodejs.core.library.configured.version": "20.19.0",
@@ -256,7 +268,9 @@
       <workItem from="1760592489498" duration="1549000" />
       <workItem from="1760604114300" duration="4140000" />
       <workItem from="1760688016925" duration="678000" />
-      <workItem from="1760690943206" duration="797000" />
+      <workItem from="1760690943206" duration="1150000" />
+      <workItem from="1760728808000" duration="1361000" />
+      <workItem from="1760784050908" duration="11063000" />
     </task>
     <task id="LOCAL-00001" summary="idea file">
       <option name="closed" value="true" />
@@ -354,7 +368,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760691507460</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Add dashboards for customers and admins&#10;&#10;- Created `customers/dashboard.html.erb` with account info and order history.&#10;- Created `admins/dashboard.html.erb` with product, order, and customer management summaries.">
+      <option name="closed" value="true" />
+      <created>1760692075589</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1760692075589</updated>
+    </task>
+    <task id="LOCAL-00014" summary="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction.">
+      <option name="closed" value="true" />
+      <created>1760692095238</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1760692095238</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -383,6 +413,8 @@
     <MESSAGE value="Add models and migrations for Cart, Order, Product, Customer, Admin, and CartItem with associated relationships. edited user rb for more relations" />
     <MESSAGE value="Add user authentication and authorization features&#10;&#10;- Implement current_user and logged_in? helper methods.&#10;- Add require_user and require_admin methods for access control.&#10;- Create SessionsController for user login and logout functionality.&#10;- Add login form view for user authentication.&#10;- Create index and new views for displaying featured products and login." />
     <MESSAGE value="Redesign product views:&#10;&#10;- Updated product index with a responsive grid layout and improved styling.&#10;- Enhanced product show page with a cleaner layout, stock indicators, and add-to-cart functionality.&#10;- Improved overall UI consistency using Tailwind CSS components." />
-    <option name="LAST_COMMIT_MESSAGE" value="Redesign product views:&#10;&#10;- Updated product index with a responsive grid layout and improved styling.&#10;- Enhanced product show page with a cleaner layout, stock indicators, and add-to-cart functionality.&#10;- Improved overall UI consistency using Tailwind CSS components." />
+    <MESSAGE value="Add dashboards for customers and admins&#10;&#10;- Created `customers/dashboard.html.erb` with account info and order history.&#10;- Created `admins/dashboard.html.erb` with product, order, and customer management summaries." />
+    <MESSAGE value="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction." />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP: Redesign cart view:&#10;&#10;- Revamped cart display with responsive layout and improved styling.&#10;- Added item thumbnails, order summary with subtotal, tax, and total calculations.&#10;- Included &quot;Edit,&quot; &quot;Remove,&quot; and &quot;Checkout&quot; actions for better user interaction." />
   </component>
 </project>

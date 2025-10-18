@@ -8,6 +8,8 @@ class CartsController < ApplicationController
 
   # GET /carts/1 or /carts/1.json
   def show
+    customer = Customer.find_by(user_id: current_user.id)
+    @cart = Cart.find_or_create_by(customer: customer)
   end
 
   # GET /carts/new
@@ -21,40 +23,14 @@ class CartsController < ApplicationController
 
   # POST /carts or /carts.json
   def create
-    @cart = Cart.new(cart_params)
-
-    respond_to do |format|
-      if @cart.save
-        format.html { redirect_to @cart, notice: "Cart was successfully created." }
-        format.json { render :show, status: :created, location: @cart }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @cart.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /carts/1 or /carts/1.json
   def update
-    respond_to do |format|
-      if @cart.update(cart_params)
-        format.html { redirect_to @cart, notice: "Cart was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @cart }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @cart.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /carts/1 or /carts/1.json
   def destroy
-    @cart.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to carts_path, notice: "Cart was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
   end
 
   private

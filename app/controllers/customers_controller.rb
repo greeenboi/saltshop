@@ -1,4 +1,5 @@
 class CustomersController < ApplicationController
+  before_action :require_user
   before_action :set_customer, only: %i[ show edit update destroy ]
 
   # GET /customers or /customers.json
@@ -55,6 +56,11 @@ class CustomersController < ApplicationController
       format.html { redirect_to customers_path, notice: "Customer was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
+  end
+
+  def dashboard
+    @customer = Customer.find_by(user_id: current_user.id)
+    @orders = @customer.orders.order(created_at: :desc).limit(5)
   end
 
   private

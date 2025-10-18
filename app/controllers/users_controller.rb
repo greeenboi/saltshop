@@ -21,15 +21,30 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
+    role_name = user_params.delete(:role).presence || 'user'
+    role = Role.find_by(name: role_name) || Role.find_by(name: 'user')
+
     @user = User.new(user_params)
+    @user.role = role
 
     respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: "User was successfully created." }
+      begin
+        ActiveRecord::Base.transaction do
+          @user.save!
+          if role&.name&.downcase == 'admin'
+            Admin.create!(user: @user)
+          else
+            Customer.create!(user: @user)
+          end
+        end
+
+        session[:user_id] = @user.id
+        format.html { redirect_to root_path, notice: "Account created successfully!" }
         format.json { render :show, status: :created, location: @user }
-      else
+      rescue ActiveRecord::RecordInvalid => e
+        # Transaction rolled back
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { render json: { errors: @user.errors.full_messages + [e.message] }, status: :unprocessable_entity }
       end
     end
   end
