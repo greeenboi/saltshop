@@ -5,7 +5,7 @@ module Admin
 
     # GET /admin/products
     def index
-      @admin = ::Admin.find_by(user: current_user)
+      @admin = ::AdminUser.find_by(user: current_user)
       @products = @admin.products.order(created_at: :desc).page(params[:page]).per(20)
     end
 
@@ -24,7 +24,7 @@ module Admin
 
     # POST /admin/products
     def create
-      @admin = ::Admin.find_by(user: current_user)
+      @admin = ::AdminUser.find_by(user: current_user)
       @product = @admin.products.build(product_params)
 
       if @product.save
@@ -52,7 +52,7 @@ module Admin
     private
 
     def set_product
-      @admin = ::Admin.find_by(user: current_user)
+      @admin = ::AdminUser.find_by(user: current_user)
       @product = @admin.products.find(params[:id])
     end
 

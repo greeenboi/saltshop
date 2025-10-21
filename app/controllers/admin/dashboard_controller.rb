@@ -3,7 +3,7 @@ module Admin
     before_action :require_admin
 
     def index
-      @admin = ::Admin.find_by(user: current_user)
+      @admin = ::AdminUser.find_by(user: current_user)
 
       # Get all orders that contain products belonging to this admin
       @orders = Order.joins(:products)

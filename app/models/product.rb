@@ -1,5 +1,10 @@
 class Product < ApplicationRecord
-  belongs_to :admin, optional: true
+  # Use AdminUser model but keep the existing `admin_id` column in the DB.
+  belongs_to :admin_user, class_name: "AdminUser", foreign_key: "admin_id", optional: true
+  # Backwards-compatibility: some code expects `product.admin`.
+  def admin
+    admin_user
+  end
   has_many :cart_items, dependent: :destroy
   has_many :order_items, dependent: :destroy
 
