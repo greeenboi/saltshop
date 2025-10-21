@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   # Resources that aren't directly accessible (used internally)
-  resources :order_items
-  resources :cart_items
+  resources :order_items, only: [ :create, :update, :destroy ]
 
   # Root path
   root "home#index"
@@ -23,7 +22,7 @@ Rails.application.routes.draw do
   resources :cart_items, only: [ :create, :update, :destroy ]
 
   # Checkout and orders
-  get "/checkout", to: "checkouts#new", as: :checkout
+  get "/checkout", to: "checkouts#new", as: :new_checkout
   post "/checkout", to: "checkouts#create", as: :checkout
   resources :orders, only: [ :index, :show, :create ]
 
@@ -31,11 +30,11 @@ Rails.application.routes.draw do
   get "/dashboard", to: "customers#dashboard", as: :customer_dashboard
 
   # Admin routes (Business Owner Dashboard)
-  namespace :admin do
+  scope module: :admin, path: "/admin", as: :admin do
     root to: "dashboard#index"
-    resources :products, controller: "products"
-    resources :orders, only: [ :index, :show, :update ], controller: "orders"
-    resources :customers, only: [ :index, :show ], controller: "customers"
+    resources :products
+    resources :orders, only: [ :index, :show, :update ]
+    resources :customers, only: [ :index, :show ]
   end
 
   # Health check

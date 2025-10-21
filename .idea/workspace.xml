@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9463beca-e50d-4cbb-bd52-f66c65ae4e36" name="Changes" comment="Paginate products in index view and configure Kaminari&#10;&#10;- Added Kaminari gem for pagination.&#10;- Configured Kaminari with default settings in `kaminari_config.rb`.&#10;- Updated `ProductsController` to paginate products with 12 items per page.">
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/saltshop.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/saltshop.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <list id="ddf00db2-a837-473c-9aab-e0cc2386b5dd" name="Changes by suvan" comment="">
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +37,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/greeenboi/saltshop.git&quot;,
-    &quot;accountId&quot;: &quot;978466ca-1190-4215-a801-ef0a654296e3&quot;
+    &quot;accountId&quot;: &quot;7089348b-3678-47d2-b875-d6f5f01ad233&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -51,11 +56,13 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Rails.rails 7.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SHELLCHECK.PATH": "C:\\Users\\suvan\\AppData\\Roaming\\JetBrains\\RubyMine2025.2\\plugins\\Shell Script\\linux\\amd64\\shellcheck",
-    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1760784110813",
+    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1761057489722",
     "credentialsType org.jetbrains.plugins.ruby.remote.impl.RubyCreateRemoteInterpreterDialog$RubyCreateRemoteSdkForm": "WSL",
+    "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
     "javascript.nodejs.core.library.configured.version": "20.19.0",
     "javascript.nodejs.core.library.typings.version": "20.19.21",
@@ -229,11 +236,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Rails.saltshop" />
       <item itemvalue="Rails.rails 7" />
+      <item itemvalue="Rails.saltshop" />
       <item itemvalue="Rake.spec: saltshop" />
-      <item itemvalue="Rake.test: saltshop" />
       <item itemvalue="Rake.spec: untrusted" />
+      <item itemvalue="Rake.test: saltshop" />
       <item itemvalue="Rake.test: untrusted" />
     </list>
   </component>
@@ -265,6 +272,8 @@
       <workItem from="1760690943206" duration="1150000" />
       <workItem from="1760728808000" duration="1361000" />
       <workItem from="1760784050908" duration="11737000" />
+      <workItem from="1761055522339" duration="643000" />
+      <workItem from="1761057414539" duration="1538000" />
     </task>
     <task id="LOCAL-00001" summary="idea file">
       <option name="closed" value="true" />
