@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     rescue ActiveRecord::RecordInvalid => e
       # Transaction rolled back
       format.html { render :new, status: :unprocessable_entity }
-      format.json { render json: {errors: @user.errors.full_messages + [e.message]}, status: :unprocessable_entity }
+      format.json { render json: { errors: @user.errors.full_messages + [ e.message ] }, status: :unprocessable_entity }
     end
   end
 

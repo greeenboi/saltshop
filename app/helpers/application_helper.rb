@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   # Returns true if the current user is an admin and owns the given product
   # Ownership is defined by Product belonging to an AdminUser (admins table),
   # and that AdminUser belongs_to the owning User.

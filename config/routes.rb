@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Resources that aren't directly accessible (used internally)
-  resources :order_items, only: [:create, :update, :destroy]
+  resources :order_items, only: [ :create, :update, :destroy ]
 
   # Root path
   root "home#index"
@@ -11,19 +11,19 @@ Rails.application.routes.draw do
   delete "/logout", to: "sessions#destroy", as: :logout
 
   get "/signup", to: "users#new", as: :signup
-  resources :users, only: [:create, :edit, :update]
+  resources :users, only: [ :create, :edit, :update ]
 
   # Public product browsing and management
   resources :products
 
   # Shopping cart
-  resource :cart, only: [:show], controller: :carts
-  resources :cart_items, only: [:create, :update, :destroy]
+  resource :cart, only: [ :show ], controller: :carts
+  resources :cart_items, only: [ :create, :update, :destroy ]
 
   # Checkout and orders
   get "/checkout", to: "checkouts#new", as: :new_checkout
   post "/checkout", to: "checkouts#create", as: :checkout
-  resources :orders, only: [:index, :show, :create]
+  resources :orders, only: [ :index, :show, :create ]
 
   # Customer dashboard (optional - can be removed if not used)
   get "/dashboard", to: "customers#dashboard", as: :customer_dashboard
@@ -35,8 +35,8 @@ Rails.application.routes.draw do
   scope module: :admin, path: "/admin", as: :admin do
     root to: "dashboard#index"
     resources :products
-    resources :orders, only: [:index, :show, :update]
-    resources :customers, only: [:index, :show]
+    resources :orders, only: [ :index, :show, :update ]
+    resources :customers, only: [ :index, :show ]
   end
 
   # Health check

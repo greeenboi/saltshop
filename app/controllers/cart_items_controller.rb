@@ -30,7 +30,7 @@ class CartItemsController < ApplicationController
     return redirect_back fallback_location: products_path, alert: "Product not found." unless product
 
     quantity = extract_quantity(params) || 1
-    quantity = [quantity.to_i, 1].max
+    quantity = [ quantity.to_i, 1 ].max
 
     if product.stock < quantity
       return redirect_to product_path(product), alert: "Not enough stock available."
