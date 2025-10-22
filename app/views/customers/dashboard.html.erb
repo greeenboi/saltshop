@@ -17,7 +17,7 @@
             <div class="order-item">
               <p>Order #<%= order.id %> - <%= order.created_at.strftime("%B %d, %Y") %></p>
               <p>Status: <span class="status-<%= order.status %>"><%= order.status.capitalize %></span></p>
-              <p>Total: $<%= order.order_items.sum { |item| item.price * item.quantity } %></p>
+              <p>Total: <%= number_to_currency(order.order_items.sum { |item| item.price * item.quantity }) %></p>
               <%= link_to "View Details", order_path(order), class: "btn btn-sm btn-info" %>
             </div>
           <% end %>

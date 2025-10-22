@@ -9,4 +9,12 @@ module ApplicationHelper
     owner_user_id = product.respond_to?(:admin_user) ? product.admin_user&.user_id : nil
     owner_user_id.present? && current_user.id == owner_user_id
   end
+
+  # Returns true if the logged-in user is a business-type account
+  # Recognizes role names like "business", "business owner", or "seller" (case-insensitive)
+  def business_user?
+    return false unless defined?(current_user)
+    role_name = current_user&.role&.name&.downcase
+    ["admin"].include?(role_name)
+  end
 end

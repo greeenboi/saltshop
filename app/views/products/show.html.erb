@@ -39,17 +39,19 @@
         <% if @product.stock && @product.stock > 0 %>
           <p class="text-sm text-green-600 font-medium mb-3">In Stock: <span class="font-semibold text-gray-800"><%= @product.stock %></span></p>
 
-          <%= form_with url: cart_items_path, method: :post, local: true do %>
-            <%= hidden_field_tag 'cart_item[product_id]', @product.id %>
+          <% unless business_user? %>
+            <%= form_with url: cart_items_path, method: :post, local: true do %>
+              <%= hidden_field_tag 'cart_item[product_id]', @product.id %>
 
-            <div class="flex items-center gap-3 mb-4">
-              <label for="quantity" class="text-sm text-gray-600">Quantity</label>
-              <%= number_field_tag 'cart_item[quantity]', 1, min: 1, max: @product.stock, id: "quantity", class: "w-20 px-2 py-1 border rounded-md text-center" %>
-            </div>
+              <div class="flex items-center gap-3 mb-4">
+                <label for="quantity" class="text-sm text-gray-600">Quantity</label>
+                <%= number_field_tag 'cart_item[quantity]', 1, min: 1, max: @product.stock, id: "quantity", class: "w-20 px-2 py-1 border rounded-md text-center" %>
+              </div>
 
-            <div>
-              <%= submit_tag "Add to Cart", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md font-medium" %>
-            </div>
+              <div>
+                <%= submit_tag "Add to Cart", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md font-medium" %>
+              </div>
+            <% end %>
           <% end %>
         <% else %>
           <p class="text-sm text-red-500 font-medium">Out of Stock</p>
