@@ -15,6 +15,6 @@ module ApplicationHelper
   def business_user?
     return false unless defined?(current_user)
     role_name = current_user&.role&.name&.downcase
-    ["admin"].include?(role_name)
+    [ "admin" ].include?(role_name)
   end
 end

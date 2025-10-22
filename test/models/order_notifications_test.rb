@@ -28,8 +28,8 @@ class OrderNotificationsTest < ActiveSupport::TestCase
     # Expect 3 emails: admin1, admin2, customer
     deliveries = ActionMailer::Base.deliveries.last(3)
     tos = deliveries.flat_map(&:to)
-    assert_includes tos, [admin1_user.email]
-    assert_includes tos, [admin2_user.email]
-    assert_includes tos, [cust_user.email]
+    assert_includes tos, [ admin1_user.email ]
+    assert_includes tos, [ admin2_user.email ]
+    assert_includes tos, [ cust_user.email ]
   end
 end

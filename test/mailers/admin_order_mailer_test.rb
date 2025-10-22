@@ -16,7 +16,7 @@ class AdminOrderMailerTest < ActionMailer::TestCase
 
     mail = AdminOrderMailer.new_order_notification(admin: admin, order: order)
 
-    assert_equal [admin_user.email], mail.to
+    assert_equal [ admin_user.email ], mail.to
     assert_match "order", mail.subject.downcase
     assert_match "Widget", mail.body.encoded
   end

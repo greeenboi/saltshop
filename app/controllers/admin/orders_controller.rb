@@ -7,7 +7,7 @@ module Admin
 
       # Base scope: orders that contain products belonging to this admin
       scope = Order.joins(:products)
-        .where(products: {admin_id: @admin.id})
+        .where(products: { admin_id: @admin.id })
         .distinct
 
       # Optional search by customer name or product name/description
@@ -26,7 +26,7 @@ module Admin
 
       # Base relation: only the order items for this admin's products
       relation = @order.order_items.joins(:product)
-        .where(products: {admin_id: @admin.id})
+        .where(products: { admin_id: @admin.id })
         .includes(:product)
 
       # Ensure this order contains at least one of the admin's products
