@@ -10,6 +10,9 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
+    # Map fixtures to non-standard model name
+    set_fixture_class admins: AdminUser
+
     # Add more helper methods to be used by all tests here...
   end
 end

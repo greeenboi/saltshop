@@ -1,5 +1,5 @@
 class AdminsController < ApplicationController
-  before_action :set_admin, only: %i[ show edit update destroy ]
+  before_action :set_admin, only: %i[show edit update destroy]
 
   # GET /admins or /admins.json
   def index
@@ -58,13 +58,14 @@ class AdminsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_admin
-      @admin = Admin.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def admin_params
-      params.expect(admin: [ :user_id ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_admin
+    @admin = Admin.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def admin_params
+    params.require(:admin).permit(:user_id)
+  end
 end

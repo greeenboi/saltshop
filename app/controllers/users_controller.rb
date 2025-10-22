@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[show edit update destroy]
 
   # GET /users or /users.json
   def index
@@ -29,24 +29,22 @@ class UsersController < ApplicationController
     @user.role = role
 
     respond_to do |format|
-      begin
-        ActiveRecord::Base.transaction do
-          @user.save!
-          if role&.name&.downcase == "admin"
-            Admin.create!(user: @user)
-          else
-            Customer.create!(user: @user)
-          end
+      ActiveRecord::Base.transaction do
+        @user.save!
+        if role&.name&.downcase == "admin"
+          AdminUser.create!(user: @user)
+        else
+          Customer.create!(user: @user)
         end
-
-        session[:user_id] = @user.id
-        format.html { redirect_to root_path, notice: "Account created successfully!" }
-        format.json { render :show, status: :created, location: @user }
-      rescue ActiveRecord::RecordInvalid => e
-        # Transaction rolled back
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: { errors: @user.errors.full_messages + [ e.message ] }, status: :unprocessable_entity }
       end
+
+      session[:user_id] = @user.id
+      format.html { redirect_to root_path, notice: "Account created successfully!" }
+      format.json { render :show, status: :created, location: @user }
+    rescue ActiveRecord::RecordInvalid => e
+      # Transaction rolled back
+      format.html { render :new, status: :unprocessable_entity }
+      format.json { render json: {errors: @user.errors.full_messages + [e.message]}, status: :unprocessable_entity }
     end
   end
 
@@ -74,13 +72,14 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.expect(user: [ :username, :password, :password_confirmation, :date_created, :name, :email, :bio, :photo_url ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def user_params
+    params.require(:user).permit(:username, :password, :password_confirmation, :date_created, :name, :email, :bio, :photo_url)
+  end
 end
