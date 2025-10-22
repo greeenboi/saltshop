@@ -6,13 +6,14 @@ class CheckoutsController < ApplicationController
     customer = Customer.find_or_create_by(user: current_user)
     @cart = Cart.find_by(customer: customer)
 
-    if @cart.nil? || @cart.cart_items.empty?
+    if @cart.blank? || @cart.cart_items.blank?
       redirect_to cart_path, alert: "Your cart is empty."
       return
     end
 
     @order = Order.new(customer: customer)
-    @subtotal = @cart.cart_items.sum { |item| item.product.price * item.quantity }
+    items = @cart.try(:cart_items) || []
+    @subtotal = items.sum { |item| item.product.price * item.quantity }
     @tax = (@subtotal * 0.1).round(2)
     @total = (@subtotal + @tax).round(2)
   end
@@ -22,21 +23,26 @@ class CheckoutsController < ApplicationController
     customer = Customer.find_by(user: current_user)
     @cart = Cart.find_by(customer: customer)
 
-    if @cart.nil? || @cart.cart_items.empty?
+    if @cart.blank? || @cart.cart_items.blank?
       redirect_to cart_path, alert: "Your cart is empty."
       return
     end
 
+    # Compute totals server-side to avoid trusting client input
+    items = @cart.try(:cart_items) || []
+    subtotal = items.sum { |ci| ci.product.price * ci.quantity }
+    tax = (subtotal * 0.1).round(2)
+    (subtotal + tax).round(2)
+
     @order = Order.new(
       customer: customer,
-      status: "pending",
-      total_amount: params[:total_amount]
+      status: "pending"
     )
 
     begin
       ActiveRecord::Base.transaction do
         # Validate stock and create order items
-        @cart.cart_items.each do |cart_item|
+        items.each do |cart_item|
           product = cart_item.product
 
           if product.stock < cart_item.quantity
