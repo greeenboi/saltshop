@@ -1,8 +1,7 @@
 class CartItemsController < ApplicationController
   before_action :require_user
-  before_action :set_cart_item, only: %i[ show edit update destroy ]
+  before_action :set_cart_item, only: %i[show edit update destroy]
   before_action :ensure_cart_item_belongs_to_current_user, only: %i[update destroy]
-
 
   # GET /cart_items or /cart_items.json
   def index
@@ -31,7 +30,7 @@ class CartItemsController < ApplicationController
     return redirect_back fallback_location: products_path, alert: "Product not found." unless product
 
     quantity = extract_quantity(params) || 1
-    quantity = [ quantity.to_i, 1 ].max
+    quantity = [quantity.to_i, 1].max
 
     if product.stock < quantity
       return redirect_to product_path(product), alert: "Not enough stock available."
@@ -77,29 +76,30 @@ class CartItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_cart_item
-      @cart_item = CartItem.find_by(id: params[:id])
-      redirect_to cart_path, alert: "Cart item not found." unless @cart_item
-    end
 
-    def ensure_cart_item_belongs_to_current_user
-      return if @cart_item&.cart&.customer&.user_id == current_user.id
+  # Use callbacks to share common setup or constraints between actions.
+  def set_cart_item
+    @cart_item = CartItem.find_by(id: params[:id])
+    redirect_to cart_path, alert: "Cart item not found." unless @cart_item
+  end
 
-      redirect_to root_path, alert: "Not authorized."
-    end
+  def ensure_cart_item_belongs_to_current_user
+    return if @cart_item&.cart&.customer&.user_id == current_user.id
 
-    # Only allow a list of trusted parameters through.
-    def cart_item_params
-      # Ensure :cart_item is present and only allow the listed attributes
-      params.require(:cart_item).permit(:cart_id, :product_id, :quantity)
-    end
+    redirect_to root_path, alert: "Not authorized."
+  end
 
-    def extract_quantity(params_obj)
-      if params_obj[:quantity].present?
-        params_obj[:quantity]
-      elsif params_obj[:cart_item].respond_to?(:[]) && params_obj[:cart_item][:quantity].present?
-        params_obj[:cart_item][:quantity]
-      end
+  # Only allow a list of trusted parameters through.
+  def cart_item_params
+    # Ensure :cart_item is present and only allow the listed attributes
+    params.require(:cart_item).permit(:cart_id, :product_id, :quantity)
+  end
+
+  def extract_quantity(params_obj)
+    if params_obj[:quantity].present?
+      params_obj[:quantity]
+    elsif params_obj[:cart_item].respond_to?(:[]) && params_obj[:cart_item][:quantity].present?
+      params_obj[:cart_item][:quantity]
     end
+  end
 end
