@@ -1,13 +1,13 @@
 <% content_for :title, "My Orders" %>
 
-<div class="max-w-6xl mx-auto p-6">
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-8">
   <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
-    <h1 class="font-bold text-4xl">My Orders</h1>
+    <h1 class="font-semibold text-3xl" style="color: var(--text);">My Orders</h1>
     <%= form_with url: orders_path, method: :get, local: true, class: "flex gap-2 w-full md:w-auto" do %>
       <%= text_field_tag :q, params[:q], placeholder: "Search by product name…", class: "flex-1 md:w-80 px-3 py-2 border rounded-md" %>
-      <%= submit_tag "Search", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium" %>
+      <%= submit_tag "Search", class: "btn-primary" %>
       <% if params[:q].present? %>
-        <%= link_to "Clear", orders_path, class: "px-3 py-2 bg-gray-100 hover:bg-gray-50 rounded-md text-sm" %>
+        <%= link_to "Clear", orders_path, class: "btn-ghost" %>
       <% end %>
     <% end %>
   </div>
@@ -15,20 +15,23 @@
   <% if @orders.any? %>
     <div class="space-y-4">
       <% @orders.each do |order| %>
-        <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition">
+        <div class="card card-interactive">
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
               <div>
-                <h3 class="font-semibold text-lg">Order #<%= order.id.to_s.first(8) %></h3>
-                <p class="text-sm text-gray-500"><%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+                <h3 class="font-semibold text-lg" style="color: var(--text);">Order #<%= order.id.to_s.first(8) %></h3>
+                <p class="text-sm text-subtle"><%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
               </div>
               <div>
-                <span class="px-4 py-2 rounded-full text-sm font-semibold
-                  <%= order.status == 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      order.status == 'processing' ? 'bg-blue-100 text-blue-800' :
-                      order.status == 'shipped' ? 'bg-purple-100 text-purple-800' :
-                      order.status == 'delivered' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800' %>">
+                <% css = case order.status
+                  when 'pending' then 'badge' # tonal later
+                  when 'processing' then 'badge badge-tonal'
+                  when 'shipped' then 'badge'
+                  when 'delivered' then 'badge'
+                  else 'badge'
+                end %>
+                <span class="<%= css %>">
+                  <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
                   <%= order.status.titleize %>
                 </span>
               </div>
@@ -38,24 +41,31 @@
               <div class="flex gap-4 overflow-x-auto pb-2">
                 <% order.order_items.first(3).each do |item| %>
                   <div class="flex-shrink-0">
-                    <div class="w-16 h-16 bg-gray-50 rounded flex items-center justify-center">
-                      <span class="text-xs text-gray-400"><%= item.product.name.first(10) %>...</span>
+                    <div class="w-16 h-16 bg-[var(--surface-alt)] border border-[rgba(54,47,45,0.08)] rounded flex items-center justify-center overflow-hidden">
+                      <% if item.product.respond_to?(:image_url) && item.product.image_url.present? %>
+                        <%= image_tag item.product.image_url, alt: item.product.name, class: "w-full h-full object-cover" %>
+                      <% else %>
+                        <i data-lucide="image" class="w-4 h-4 text-subtle"></i>
+                      <% end %>
                     </div>
                   </div>
                 <% end %>
                 <% if order.order_items.count > 3 %>
-                  <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
-                    <span class="text-xs text-gray-500">+<%= order.order_items.count - 3 %> more</span>
+                  <div class="flex-shrink-0 w-16 h-16 bg-[var(--surface-alt)] border border-[rgba(54,47,45,0.08)] rounded flex items-center justify-center">
+                    <span class="text-xs text-subtle">+<%= order.order_items.count - 3 %> more</span>
                   </div>
                 <% end %>
               </div>
 
               <div class="mt-4 flex items-center justify-between">
                 <div>
-                  <p class="text-sm text-gray-500"><%= pluralize(order.order_items.count, 'item') %></p>
-                  <p class="font-semibold text-lg"><%= number_to_currency(order.calculate_total) %></p>
+                  <p class="text-sm text-subtle"><%= pluralize(order.order_items.count, 'item') %></p>
+                  <p class="font-semibold text-lg" style="color: var(--text);"><%= number_to_currency(order.calculate_total) %></p>
                 </div>
-                <%= link_to "View Details", order_path(order), class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition" %>
+                <%= link_to order_path(order), class: "btn-primary" do %>
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                  <span>View Details</span>
+                <% end %>
               </div>
             </div>
           </div>
@@ -63,13 +73,11 @@
       <% end %>
     </div>
   <% else %>
-    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-12 text-center">
-      <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-      </svg>
-      <h2 class="text-2xl font-semibold text-gray-900 mb-2">No Orders Yet</h2>
-      <p class="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping to see your orders here!</p>
-      <%= link_to "Start Shopping", products_path, class: "inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition" %>
+    <div class="card p-12 text-center">
+      <i data-lucide="shopping-bag" class="w-16 h-16 text-subtle mx-auto mb-4"></i>
+      <h2 class="text-2xl font-semibold" style="color: var(--text);">No Orders Yet</h2>
+      <p class="text-subtle mb-6">You haven't placed any orders yet. Start shopping to see your orders here!</p>
+      <%= link_to "Start Shopping", products_path, class: "btn-primary" %>
     </div>
   <% end %>
 </div>

@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Saltshop" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#8b5e34">
+    <meta name="description" content="<%= (content_for?(:meta_description) && yield(:meta_description)) || 'Saltshop — a minimal, modern shop for curated goods.' %>">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<%= content_for?(:title) ? yield(:title) : 'Saltshop' %>">
+    <meta property="og:description" content="<%= (content_for?(:meta_description) && yield(:meta_description)) || 'Minimal, matte and modern store experience.' %>">
+    <meta property="og:image" content="<%= "#{request.base_url}/icon.png" %>">
+    <meta property="og:url" content="<%= request.original_url rescue root_url %>">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= content_for?(:title) ? yield(:title) : 'Saltshop' %>">
+    <meta name="twitter:description" content="<%= (content_for?(:meta_description) && yield(:meta_description)) || 'Minimal, matte and modern store experience.' %>">
+    <meta name="twitter:image" content="<%= "#{request.base_url}/icon.png" %>">
+
+    <link rel="canonical" href="<%= request.original_url rescue root_url %>">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -18,45 +36,27 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 
     <!-- Alpine.js for dropdown functionality -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Lucide Icons (for consistent iconography) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
   </head>
 
-  <body class="bg-gray-50" x-data="{ mobileMenuOpen: false }">
+  <body x-data="{ mobileMenuOpen: false }">
     <%= render "shared/navbar" %>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-4">
+      <%= render "shared/flash" %>
+    </div>
 
     <main class="min-h-screen">
       <%= yield %>
     </main>
 
-    <footer class="bg-gray-800 text-white mt-12">
-      <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 class="text-lg font-semibold mb-4">SaltShop</h3>
-            <p class="text-gray-400 text-sm">Your trusted marketplace for quality products from verified sellers.</p>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul class="space-y-2 text-sm">
-              <li><%= link_to "Products", products_path, class: "text-gray-400 hover:text-white transition" %></li>
-              <% if logged_in? && current_user.role&.name == 'admin' %>
-                <li><%= link_to "Seller Dashboard", admin_root_path, class: "text-gray-400 hover:text-white transition" %></li>
-              <% end %>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Support</h3>
-            <p class="text-gray-400 text-sm">Need help? Contact us at support@saltshop.com</p>
-          </div>
-        </div>
-        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
-          <p>&copy; <%= Time.current.year %> SaltShop. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
+    <%= render "shared/footer" %>
   </body>
 </html>

@@ -5,6 +5,14 @@ Rails.application.routes.draw do
   # Root path
   root "home#index"
 
+  # Static pages
+  get "/about", to: "pages#about", as: :about
+  get "/contact", to: "pages#contact", as: :contact
+  get "/terms", to: "pages#terms", as: :terms
+  get "/privacy", to: "pages#privacy", as: :privacy
+  get "/shipping", to: "pages#shipping", as: :shipping
+  get "/returns", to: "pages#returns", as: :returns
+
   # Authentication routes
   get "/login", to: "sessions#new", as: :login
   post "/login", to: "sessions#create"

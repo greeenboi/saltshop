@@ -1,11 +1,11 @@
-<% content_for :title, "Showing cart" %>
+<% content_for :title, "Your Cart" %>
 
-<div class="max-w-5xl mx-auto p-6">
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-8">
   <% if notice.present? %>
-    <p id="notice" class="py-2 px-3 bg-green-50 mb-5 text-green-600 font-medium rounded-md inline-block"><%= notice %></p>
+    <div class="alert alert-success mb-4"><i data-lucide="check-circle" class="w-4 h-4"></i><span><%= notice %></span></div>
   <% end %>
 
-  <h1 class="font-bold text-3xl mb-6">Your Shopping Cart</h1>
+  <h1 class="font-semibold text-3xl mb-6" style="color: var(--text);">Your Shopping Cart</h1>
 
   <% if @cart && @cart.cart_items.any? %>
     <% subtotal = @cart.cart_items.sum { |item| item.product.price * item.quantity } %>
@@ -14,93 +14,89 @@
 
     <div class="md:flex md:gap-8">
       <!-- Items -->
-      <div class="md:w-2/3 w-full bg-white border border-gray-100 rounded-lg shadow-sm p-4">
-        <div class="space-y-4">
-          <% @cart.cart_items.each do |item| %>
-            <div class="flex gap-4 items-start border-b last:border-b-0 pb-4">
-              <div class="w-24 h-24 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden">
-                <% if item.product.respond_to?(:image_url) && item.product.image_url.present? %>
-                  <%= image_tag item.product.image_url, alt: item.product.name, class: "w-full h-full object-cover" %>
-                <% else %>
-                  <span class="text-sm text-gray-400">No image</span>
-                <% end %>
-              </div>
-
-              <div class="flex-1">
-                <div class="flex items-start justify-between">
-                  <div>
-                    <h3 class="text-lg font-medium text-gray-900">
-                      <%= link_to item.product.name, product_path(item.product), class: "hover:underline" %>
-                    </h3>
-                    <p class="text-sm text-gray-500"><%= truncate(item.product.description, length: 120) %></p>
-                  </div>
-
-                  <div class="text-right">
-                    <p class="text-lg font-semibold text-gray-900"><%= number_to_currency(item.product.price) %></p>
-                    <p class="text-sm text-gray-500">× <%= item.quantity %></p>
-                  </div>
+      <div class="md:w-2/3 w-full">
+        <div class="card p-4">
+          <div class="space-y-4">
+            <% @cart.cart_items.each do |item| %>
+              <div class="flex gap-4 items-start border-b last:border-b-0 pb-4">
+                <div class="w-24 h-24 bg-[var(--surface-alt)] rounded-md flex items-center justify-center overflow-hidden border border-[rgba(54,47,45,0.08)]">
+                  <% if item.product.respond_to?(:image_url) && item.product.image_url.present? %>
+                    <%= image_tag item.product.image_url, alt: item.product.name, class: "w-full h-full object-cover" %>
+                  <% else %>
+                    <i data-lucide="image" class="w-5 h-5 text-subtle"></i>
+                  <% end %>
                 </div>
 
-                <div class="mt-3 flex items-center gap-3">
-                  <%= form_with model: item, local: true, class: "flex items-center gap-2" do |f| %>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <%= f.number_field :quantity, min: 1, max: item.product.stock, class: "w-20 px-2 py-1 border rounded-md text-center" %>
+                      <h3 class="text-lg font-semibold" style="color: var(--text);">
+                        <%= link_to item.product.name, product_path(item.product), class: "hover:underline" %>
+                      </h3>
+                      <p class="text-sm text-subtle"><%= truncate(item.product.description, length: 120) %></p>
                     </div>
-                    <div>
-                      <%= f.submit "Update", class: "px-3 py-1 bg-gray-100 hover:bg-gray-50 rounded-md text-sm" %>
+
+                    <div class="text-right">
+                      <p class="text-lg font-semibold" style="color: var(--text);"><%= number_to_currency(item.product.price) %></p>
+                      <p class="text-sm text-subtle">× <%= item.quantity %></p>
                     </div>
-                  <% end %>
+                  </div>
 
-                  <%= button_to cart_item_path(item), method: :delete, form_class: "m-0", class: "px-3 py-1 bg-red-600 hover:bg-red-500 text-white rounded-md text-sm", data: { turbo_confirm: "Remove this item?" } do %>
-                    Remove
-                  <% end %>
+                  <div class="mt-3 flex items-center gap-3">
+                    <%= form_with model: item, local: true, class: "flex items-center gap-2" do |f| %>
+                      <%= f.number_field :quantity, min: 1, max: item.product.stock, class: "w-24 px-3 py-2 border rounded-md text-center" %>
+                      <%= f.submit "Update", class: "btn-ghost" %>
+                    <% end %>
 
-                  <div class="ml-auto text-sm text-gray-700">
-                    Subtotal: <span class="font-medium"><%= number_to_currency(item.product.price * item.quantity) %></span>
+                    <%= button_to cart_item_path(item), method: :delete, form_class: "m-0", class: "btn-pill btn-pill-danger", data: { turbo_confirm: "Remove this item?" } do %>
+                      <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      <span>Remove</span>
+                    <% end %>
+
+                    <div class="ml-auto text-sm" style="color: var(--text);">
+                      Subtotal: <span class="font-medium"><%= number_to_currency(item.product.price * item.quantity) %></span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
 
       <!-- Summary -->
       <aside class="md:w-1/3 w-full mt-4 md:mt-0">
-        <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-6">
-          <h2 class="text-lg font-semibold mb-4">Order Summary</h2>
+        <div class="card p-6 sticky top-6">
+          <h2 class="text-lg font-semibold mb-4" style="color: var(--text);">Order Summary</h2>
 
-          <div class="space-y-2 text-sm text-gray-700">
-            <div class="flex justify-between">
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between text-subtle">
               <span>Subtotal</span>
               <span><%= number_to_currency(subtotal) %></span>
             </div>
-
-            <div class="flex justify-between">
+            <div class="flex justify-between text-subtle">
               <span>Tax (10%)</span>
               <span><%= number_to_currency(tax) %></span>
             </div>
-
-            <div class="flex justify-between pt-2 border-t border-gray-100 font-semibold text-gray-900">
+            <div class="flex justify-between pt-2 border-t font-semibold" style="color: var(--text);">
               <span>Total</span>
               <span><%= number_to_currency(total) %></span>
             </div>
           </div>
 
           <div class="mt-6">
-            <%= button_to "Proceed to Checkout", checkout_path, method: :get, class: "w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md font-medium" %>
+            <%= button_to "Proceed to Checkout", checkout_path, method: :get, class: "w-full btn-primary justify-center" %>
           </div>
-
           <div class="mt-3">
-            <%= link_to "Continue Shopping", products_path, class: "w-full block text-center px-4 py-2 bg-gray-100 hover:bg-gray-50 text-gray-700 rounded-md font-medium" %>
+            <%= link_to "Continue Shopping", products_path, class: "w-full block text-center btn-ghost" %>
           </div>
         </div>
       </aside>
     </div>
   <% else %>
-    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-6 text-center">
-      <p class="text-gray-700 mb-4">Your cart is empty.</p>
-      <%= link_to "Continue shopping", products_path, class: "inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md" %>
+    <div class="card p-6 text-center">
+      <p class="text-[var(--text)]/85 mb-4">Your cart is empty.</p>
+      <%= link_to "Continue shopping", products_path, class: "btn-primary" %>
     </div>
   <% end %>
 </div>

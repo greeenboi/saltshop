@@ -2,29 +2,29 @@
 
 /*
   Design tokens and template values for the app.
-  Enhanced to feel closer to a Material UI style dashboard.
+  Updated to a minimal, matte brown light theme.
 */
 :root {
-  /* Brand / Primary palette */
-  --brand-50: #eff6ff;
-  --brand-100: #dbeafe;
-  --brand-200: #bfdbfe;
-  --brand-300: #93c5fd;
-  --brand-400: #60a5fa;
-  --brand-500: #3b82f6; /* primary main */
-  --brand-600: #2563eb; /* primary dark */
-  --brand-700: #1d4ed8;
+  /* Brand / Primary palette (matte brown) */
+  --brand-50: #f9f5f1;
+  --brand-100: #f2eae2;
+  --brand-200: #e8ddd2;
+  --brand-300: #d9c7b3;
+  --brand-400: #b89b78;
+  --brand-500: #a1775a; /* primary main */
+  --brand-600: #8b5e34; /* primary dark */
+  --brand-700: #6f4e37; /* espresso-ish */
   --brand-contrast: #ffffff;
 
-  /* Secondary (indigo-esque like MUI secondary) */
-  --secondary-50: #eef2ff;
-  --secondary-100: #e0e7ff;
-  --secondary-200: #c7d2fe;
-  --secondary-300: #a5b4fc;
-  --secondary-400: #818cf8;
-  --secondary-500: #6366f1;
-  --secondary-600: #4f46e5;
-  --secondary-700: #4338ca;
+  /* Secondary (muted khaki/olive) */
+  --secondary-50: #f6f5f1;
+  --secondary-100: #edeadf;
+  --secondary-200: #e2dfcf;
+  --secondary-300: #cdc7b0;
+  --secondary-400: #b3a98f;
+  --secondary-500: #a68a64;
+  --secondary-600: #8c7353;
+  --secondary-700: #705c44;
 
   /* Semantic palettes */
   --success-50:#ecfdf5; --success-500:#10b981; --success-600:#059669; --success-700:#047857; --success-contrast:#ffffff;
@@ -33,12 +33,12 @@
   --error-50:#fef2f2;   --error-500:#ef4444;    --error-600:#dc2626;    --error-700:#b91c1c;   --error-contrast:#ffffff;
 
   /* Neutral / UI */
-  --bg: #f3f4f6; /* gray-100 */
+  --bg: #faf7f2; /* warm light */
   --surface: #ffffff;
-  --surface-alt: #f8fafc;
-  --muted: #6b7280; /* gray-500 */
-  --text: #111827; /* gray-900 */
-  --subtle: #9ca3af; /* gray-400 */
+  --surface-alt: #fbfaf8;
+  --muted: #6b6057; /* warm gray */
+  --text: #1b1714; /* deep brown-black */
+  --subtle: #9a9086; /* subtle brown gray */
 
   /* Role badges */
   --role-admin-bg: #fee2e2; --role-admin-text: #991b1b;
@@ -51,22 +51,22 @@
   --radius-md: 10px;
   --radius-lg: 14px;
 
-  /* Elevations (Material-esque) */
+  /* Elevations */
   --shadow-1: 0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
-  --shadow-2: 0 2px 4px -2px rgba(16,24,40,.06),0 4px 8px -2px rgba(16,24,40,.10);
+  --shadow-2: 0 2px 4px -2px rgba(16,24,40,.06),0 4px 8px -2px rgba(16,24,40,.08);
   --shadow-3: 0 4px 6px -2px rgba(16,24,40,.06),0 12px 16px -4px rgba(16,24,40,.10);
   --shadow-4: 0 8px 8px -4px rgba(16,24,40,.08),0 20px 24px -4px rgba(16,24,40,.10);
 
   --card-shadow: var(--shadow-1);
   --card-shadow-strong: var(--shadow-3);
-  --focus-ring: 0 0 0 3px rgba(59,130,246,0.45);
+  --focus-ring: 0 0 0 3px rgba(161,119,90,0.35);
 }
 
 @layer base {
   /* Basic page defaults that cooperate with Tailwind utilities */
   html, body { height: 100%; }
   body {
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    background: linear-gradient(180deg, var(--surface-alt) 0%, var(--bg) 100%);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -77,7 +77,7 @@
   /* Make form elements respect the design tokens by default */
   input, textarea, select {
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(15,23,42,0.10);
+    border: 1px solid rgba(54, 47, 45, 0.12);
     background: var(--surface);
   }
 }
@@ -114,17 +114,17 @@
     background: var(--surface);
     border-radius: var(--radius-lg);
     box-shadow: var(--card-shadow);
-    border: 1px solid rgba(15,23,42,0.05);
+    border: 1px solid rgba(15,23,42,0.06);
     overflow: hidden;
     position: relative;
   }
   .card-interactive { transition: box-shadow .25s, transform .25s, border-color .25s; }
-  .card-interactive:hover { box-shadow: var(--card-shadow-strong); transform: translateY(-2px); border-color: rgba(15,23,42,0.07); }
+  .card-interactive:hover { box-shadow: var(--card-shadow-strong); transform: translateY(-2px); border-color: rgba(15,23,42,0.10); }
   .card-interactive:active { transform: translateY(-1px); }
 
   /* Stat tile component */
-  .stat-tile { padding:1rem 1rem 1.05rem; border-radius: var(--radius-lg); background: linear-gradient(145deg,#ffffff 0%,#f1f5f9 100%); position:relative; overflow:hidden; box-shadow: var(--shadow-1); border:1px solid rgba(15,23,42,.05); }
-  .stat-tile:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 85% 15%, rgba(59,130,246,0.15), transparent 60%); opacity:.6; }
+  .stat-tile { padding:1rem 1rem 1.05rem; border-radius: var(--radius-lg); background: linear-gradient(145deg,#ffffff 0%,#f6f2ed 100%); position:relative; overflow:hidden; box-shadow: var(--shadow-1); border:1px solid rgba(15,23,42,.06); }
+  .stat-tile:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 85% 15%, rgba(161,119,90,0.18), transparent 60%); opacity:.6; }
   .stat-label { font-size:.65rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color: var(--muted); }
   .stat-value { font-size:1.875rem; line-height:1.2; font-weight:700; color: var(--text); }
 
@@ -196,6 +196,15 @@
   .elevation-md { box-shadow: var(--shadow-2); }
   .elevation-lg { box-shadow: var(--shadow-3); }
   .scrollbar-thin::-webkit-scrollbar { width:6px; height:6px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbbfb3; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background:#a89584; }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes slideUp { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform: translateY(0) } }
+  @keyframes float { 0%{ transform: translateY(0) } 50%{ transform: translateY(-2px) } 100%{ transform: translateY(0) } }
+
+  .animate-fade-in { animation: fadeIn .5s ease-out both; }
+  .animate-slide-up { animation: slideUp .6s ease-out both; }
+  .animate-float { animation: float 3.2s ease-in-out infinite; }
 }

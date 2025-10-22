@@ -17,4 +17,20 @@ module ApplicationHelper
     role_name = current_user&.role&.name&.downcase
     [ "admin" ].include?(role_name)
   end
+
+  # Current customer and cart helpers
+  def current_customer
+    return nil unless defined?(current_user) && current_user
+    @current_customer ||= Customer.find_by(user: current_user)
+  end
+
+  def current_cart
+    return nil unless current_customer
+    @current_cart ||= Cart.find_by(customer: current_customer)
+  end
+
+  def cart_item_count
+    return 0 unless current_cart
+    current_cart.cart_items.sum(:quantity)
+  end
 end

@@ -1,35 +1,35 @@
 <% content_for :title, "Products" %>
 
-<div class="products-container max-w-7xl mx-auto p-6" data-controller="products-filter">
+<div class="products-container max-w-7xl mx-auto px-6 lg:px-8 py-8" data-controller="products-filter">
   <% if notice.present? %>
-    <p id="notice" class="py-2 px-3 bg-green-50 mb-5 text-green-600 font-medium rounded-md inline-block"><%= notice %></p>
+    <div class="alert alert-success mb-4"><i data-lucide="check-circle" class="w-4 h-4"></i><span><%= notice %></span></div>
   <% end %>
 
   <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
-    <h1 class="font-semibold text-3xl">Shop Our Products</h1>
+    <h1 class="font-semibold text-3xl" style="color: var(--text);">Shop Our Products</h1>
     <%= form_with url: products_path, method: :get, local: true, class: "flex gap-2 w-full md:w-auto" do %>
       <%= text_field_tag :q, params[:q], placeholder: "Search products by name…", class: "flex-1 md:w-80 px-3 py-2 border rounded-md" %>
-      <%= submit_tag "Search", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium" %>
+      <%= submit_tag "Search", class: "btn-primary" %>
       <% if params[:q].present? %>
-        <%= link_to "Clear", products_path, class: "px-3 py-2 bg-gray-100 hover:bg-gray-50 rounded-md text-sm" %>
+        <%= link_to "Clear", products_path, class: "btn-ghost" %>
       <% end %>
     <% end %>
   </div>
 
-  <div class="filters mb-6 bg-white shadow-sm rounded-lg border border-gray-100 p-4">
+  <div class="filters mb-6 card p-4">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
       <div>
-        <label for="filter-min-price" class="block text-sm text-gray-600">Min price</label>
+        <label for="filter-min-price" class="block text-sm text-muted">Min price</label>
         <input id="filter-min-price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border rounded-md" placeholder="0.00"
                data-products-filter-target="min" data-action="input->products-filter#run">
       </div>
       <div>
-        <label for="filter-max-price" class="block text-sm text-gray-600">Max price</label>
+        <label for="filter-max-price" class="block text-sm text-muted">Max price</label>
         <input id="filter-max-price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border rounded-md" placeholder="9999.99"
                data-products-filter-target="max" data-action="input->products-filter#run">
       </div>
       <div>
-        <label for="filter-stock" class="block text-sm text-gray-600">Stock</label>
+        <label for="filter-stock" class="block text-sm text-muted">Stock</label>
         <select id="filter-stock" class="w-full px-3 py-2 border rounded-md"
                 data-products-filter-target="stock" data-action="change->products-filter#run">
           <option value="all" selected>All</option>
@@ -39,7 +39,7 @@
       </div>
       <div class="flex gap-2">
         <div class="grow">
-          <label for="sort-by" class="block text-sm text-gray-600">Sort</label>
+          <label for="sort-by" class="block text-sm text-muted">Sort</label>
           <select id="sort-by" class="w-full px-3 py-2 border rounded-md"
                   data-products-filter-target="sort" data-action="change->products-filter#applySort">
             <option value="none" selected>None</option>
@@ -51,8 +51,7 @@
             <option value="stock-desc">Stock ↓</option>
           </select>
         </div>
-        <button class="self-end px-3 py-2 bg-gray-100 hover:bg-gray-50 rounded-md text-sm"
-                data-action="click->products-filter#reset">Reset</button>
+        <button class="self-end btn-ghost" data-action="click->products-filter#reset"><i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset</button>
       </div>
     </div>
   </div>
@@ -60,9 +59,9 @@
   <% if @products.any? %>
     <div class="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-products-filter-target="grid">
       <% @products.each do |product| %>
-        <div class="product-card bg-white shadow-sm rounded-lg overflow-hidden border border-gray-100" data-products-filter-target="card" data-price="<%= product.price.to_f %>" data-stock="<%= product.stock.to_i %>" data-name="<%= product.name.to_s.downcase %>">
+        <div class="product-card card card-interactive overflow-hidden" data-products-filter-target="card" data-price="<%= product.price.to_f %>" data-stock="<%= product.stock.to_i %>" data-name="<%= product.name.to_s.downcase %>">
           <!-- Product image -->
-          <div class="w-full aspect-square bg-gray-50 border-b border-gray-100 overflow-hidden">
+          <div class="w-full aspect-square bg-[var(--surface-alt)] border-b border-[rgba(54,47,45,0.08)] overflow-hidden">
             <% if product.images.attached? %>
               <%= link_to product_path(product), class: "block w-full h-full" do %>
                 <%= cl_image_tag(product.images.first.key, width: 600, height: 600, crop: "fill", alt: product.name, class: "w-full h-full object-cover", loading: "lazy") %>
@@ -72,54 +71,59 @@
                 <%= image_tag product.image_url, alt: product.name, class: "w-full h-full object-cover", loading: "lazy" %>
               <% end %>
             <% else %>
-              <div class="w-full h-full flex items-center justify-center text-sm text-gray-400">No image</div>
+              <div class="w-full h-full flex items-center justify-center text-sm text-subtle"><i data-lucide="image" class="w-5 h-5 mr-1"></i> No image</div>
             <% end %>
           </div>
 
           <div class="p-4 flex flex-col h-full">
             <div class="flex-1">
-              <h3 class="text-lg font-semibold mb-1">
-                <%= link_to product.name, product_path(product), class: "hover:underline text-gray-800" %>
+              <h3 class="text-lg font-semibold mb-1" style="color: var(--text);">
+                <%= link_to product.name, product_path(product), class: "hover:underline" %>
               </h3>
               <div class="flex items-center justify-between mb-2">
-                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700" data-testid="product-price-badge">
+                <span class="chip" data-testid="product-price-badge">
+                  <i data-lucide="circle-dollar-sign" class="w-4 h-4"></i>
                   <%= number_to_currency(product.price || 0) %>
                 </span>
                 <% if business_user? %>
                   <% if product.stock.to_i > 0 %>
-                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700" data-testid="product-stock">In stock: <%= product.stock.to_i %></span>
+                    <span class="badge badge-tonal" data-testid="product-stock">In stock: <%= product.stock.to_i %></span>
                   <% else %>
-                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-50 text-red-600" data-testid="product-stock">Out of stock</span>
+                    <span class="badge" style="background: var(--error-50); color: var(--error-700);" data-testid="product-stock">Out of stock</span>
                   <% end %>
                 <% end %>
               </div>
-              <p class="text-sm text-gray-500 mb-3"><%= truncate(product.description, length: 100) %></p>
+              <p class="text-sm text-subtle mb-3"><%= truncate(product.description, length: 100) %></p>
             </div>
 
             <div class="mt-auto pt-2 border-t flex items-center justify-between">
               <div class="actions flex flex-col sm:flex-row gap-2">
                 <% if product.stock.to_i > 0 %>
-                  <%= button_to cart_items_path(product_id: product.id), method: :post, class: "px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-sm", form_class: "m-0" do %>
+                  <%= button_to cart_items_path(product_id: product.id), method: :post, class: "btn-primary", form_class: "m-0" do %>
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                     Add to Cart
                   <% end %>
                 <% else %>
-                  <span class="out-of-stock text-sm px-3 py-2 bg-gray-50 text-gray-400 rounded-md">Out of Stock</span>
+                  <span class="text-sm px-3 py-2 bg-[var(--brand-50)] text-subtle rounded-md">Out of Stock</span>
                 <% end %>
               </div>
               <div class="flex gap-2 ml-2">
-                <%= link_to "Show", product, class: "text-sm px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-50" %>
+                <%= link_to "Show", product, class: "btn-ghost" %>
+              </div>
+
+              <div class="hidden"></div>
             </div>
 
             <div class="mt-4 border-t pt-3 flex items-center justify-between">
               <div class="flex gap-2">
-                <%= link_to "View", product, class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+                <%= link_to "View", product, class: "btn-ghost" %>
                 <% if can_manage_product?(product) %>
-                  <%= link_to "Edit", edit_admin_product_path(product), class: "text-sm px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-50" %>
+                  <%= link_to "Edit", edit_admin_product_path(product), class: "btn-pill" %>
                 <% end %>
               </div>
               <div>
                 <% if can_manage_product?(product) %>
-                  <%= button_to "Destroy", admin_product_path(product), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-sm px-3 py-2 rounded-md bg-red-600 hover:bg-red-500 text-white" %>
+                  <%= button_to "Destroy", admin_product_path(product), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn-pill btn-pill-danger" %>
                 <% end %>
               </div>
             </div>
@@ -132,7 +136,6 @@
       <%= paginate @products, params: request.query_parameters %>
     </div>
   <% else %>
-    <p class="text-center my-10 text-gray-500">No products found.</p>
+    <p class="text-center my-10 text-subtle">No products found.</p>
   <% end %>
-</div>
 </div>

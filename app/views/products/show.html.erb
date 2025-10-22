@@ -1,74 +1,99 @@
-<% content_for :title, "Showing product" %>
+<% content_for :title, (@product.name.presence || "Product") %>
+<% content_for :meta_description do %>
+  <%= truncate(@product.description.to_s, length: 150) %>
+<% end %>
 
-<div class="max-w-5xl mx-auto p-6">
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
   <% if notice.present? %>
-    <p id="notice" class="py-2 px-3 bg-green-50 mb-5 text-green-600 font-medium rounded-md inline-block"><%= notice %></p>
+    <div class="alert alert-success mb-4"><i data-lucide="check-circle" class="w-4 h-4"></i><span><%= notice %></span></div>
   <% end %>
 
-  <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-100 p-6 md:flex md:gap-8">
+  <div class="card p-6 md:flex md:gap-8">
     <!-- Images -->
     <div class="product-images md:w-1/2 w-full">
       <% if @product.images.attached? %>
         <div class="grid grid-cols-2 gap-3">
           <% @product.images.each do |img| %>
-            <div class="w-full aspect-square bg-gray-50 border border-gray-200 rounded-md flex items-center justify-center overflow-hidden">
-              <%= cl_image_tag(img.key, width: 600, height: 600, crop: "fill", alt: @product.name, class: "w-full h-full object-cover") %>
+            <div class="w-full aspect-square bg-[var(--surface-alt)] border border-[rgba(54,47,45,0.12)] rounded-md flex items-center justify-center overflow-hidden">
+              <%= cl_image_tag(img.key, width: 800, height: 800, crop: "fill", alt: @product.name, class: "w-full h-full object-cover") %>
             </div>
           <% end %>
         </div>
       <% elsif @product.respond_to?(:image_url) && @product.image_url.present? %>
-        <%= image_tag @product.image_url, alt: @product.name, class: "w-full h-80 object-cover rounded-md" %>
+        <div class="w-full aspect-square bg-[var(--surface-alt)] border border-[rgba(54,47,45,0.12)] rounded-md overflow-hidden">
+          <%= image_tag @product.image_url, alt: @product.name, class: "w-full h-full object-cover" %>
+        </div>
       <% else %>
-        <div class="w-full h-80 bg-gray-50 border border-dashed border-gray-200 rounded-md flex items-center justify-center text-gray-400">
-          No image
+        <div class="w-full aspect-square bg-[var(--surface-alt)] border border-dashed border-[rgba(54,47,45,0.18)] rounded-md flex items-center justify-center text-subtle">
+          <div class="text-center">
+            <i data-lucide="image" class="w-8 h-8 mb-2"></i>
+            <div class="text-sm">Product image placeholder</div>
+          </div>
         </div>
       <% end %>
     </div>
 
     <!-- Info -->
     <div class="product-info md:w-1/2 w-full mt-6 md:mt-0 flex flex-col">
-      <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @product.name %></h1>
-      <p class="text-2xl font-bold text-gray-900 mb-4"><%= number_to_currency(@product.price) %></p>
+      <h1 class="text-3xl font-semibold" style="color: var(--text);"><%= @product.name %></h1>
+      <p class="text-2xl font-bold mt-1" style="color: var(--text);"><%= number_to_currency(@product.price) %></p>
 
-      <div class="description mb-4">
-        <h2 class="text-sm font-medium text-gray-500 mb-2">Description</h2>
-        <p class="text-gray-700"><%= simple_format(@product.description) %></p>
+      <div class="description mt-5">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-muted mb-2">Description</h2>
+        <div class="text-[15px] text-[var(--text)]/90">
+          <%= simple_format(@product.description) %>
+        </div>
       </div>
 
-      <div class="stock-info mt-4">
+      <div class="stock-info mt-6">
         <% if @product.stock && @product.stock > 0 %>
-          <p class="text-sm text-green-600 font-medium mb-3">In Stock: <span class="font-semibold text-gray-800"><%= @product.stock %></span></p>
+          <div class="inline-flex items-center gap-2 badge badge-tonal mb-3">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            In Stock: <%= @product.stock %>
+          </div>
 
           <% unless business_user? %>
             <%= form_with url: cart_items_path, method: :post, local: true do %>
               <%= hidden_field_tag 'cart_item[product_id]', @product.id %>
 
               <div class="flex items-center gap-3 mb-4">
-                <label for="quantity" class="text-sm text-gray-600">Quantity</label>
-                <%= number_field_tag 'cart_item[quantity]', 1, min: 1, max: @product.stock, id: "quantity", class: "w-20 px-2 py-1 border rounded-md text-center" %>
+                <label for="quantity" class="text-sm text-muted">Quantity</label>
+                <%= number_field_tag 'cart_item[quantity]', 1, min: 1, max: @product.stock, id: "quantity", class: "w-24 px-3 py-2 border rounded-md text-center" %>
               </div>
 
               <div>
-                <%= submit_tag "Add to Cart", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md font-medium" %>
+                <button type="submit" class="btn-primary"><i data-lucide="shopping-cart" class="w-4 h-4"></i> Add to Cart</button>
               </div>
             <% end %>
           <% end %>
         <% else %>
-          <p class="text-sm text-red-500 font-medium">Out of Stock</p>
+          <div class="inline-flex items-center gap-2 badge mb-3" style="background: var(--error-50); color: var(--error-700);">
+            <i data-lucide="x-circle" class="w-4 h-4"></i>
+            Out of Stock
+          </div>
         <% end %>
       </div>
 
       <div class="mt-6 border-t pt-4 flex flex-col sm:flex-row gap-2">
         <div class="flex gap-2">
           <% if can_manage_product?(@product) %>
-            <%= link_to "Edit this product", edit_admin_product_path(@product), class: "text-sm px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+            <%= link_to edit_admin_product_path(@product), class: "btn-pill" do %>
+              <i data-lucide="pencil" class="w-4 h-4"></i>
+              <span>Edit product</span>
+            <% end %>
           <% end %>
-          <%= link_to "Back to products", products_path, class: "text-sm px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+          <%= link_to products_path, class: "btn-ghost" do %>
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Back to products</span>
+          <% end %>
         </div>
 
         <div class="sm:ml-auto">
           <% if can_manage_product?(@product) %>
-            <%= button_to "Destroy this product", admin_product_path(@product), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-sm px-3 py-2 rounded-md bg-red-600 hover:bg-red-500 text-white font-medium" %>
+            <%= button_to admin_product_path(@product), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn-pill btn-pill-danger" do %>
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+              <span>Destroy</span>
+            <% end %>
           <% end %>
         </div>
       </div>
