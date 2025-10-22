@@ -29,3 +29,14 @@
 
 en:
   hello: "Hello world"
+
+  # Global currency formatting for number_to_currency
+  number:
+    currency:
+      format:
+        unit: "₹"
+        # Keep symbol before number; change if you prefer after: "%n %u"
+        format: "%u%n"
+        separator: "."
+        delimiter: ","
+        precision: 2
