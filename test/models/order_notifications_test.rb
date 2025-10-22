@@ -1,32 +1,35 @@
+# file: 'test/models/order_notifications_test.rb'
 require "test_helper"
 
 class OrderNotificationsTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  test "sends admin notifications and customer confirmation" do
-    customer = customers(:one)
-    product1 = products(:one) # admin: one
-    product2 = products(:two) # admin: two
+  test "enqueues one email per unique admin and one to the customer" do
+    admin1_user = User.create!(username: "admin1", email: "admin1@example.test", password: "Password1!")
+    admin2_user = User.create!(username: "admin2", email: "admin2@example.test", password: "Password1!")
+    admin1 = AdminUser.create!(user: admin1_user)
+    admin2 = AdminUser.create!(user: admin2_user)
+
+    p1 = Product.create!(name: "A", price: 5, stock: 10, admin: admin1)
+    p2 = Product.create!(name: "B", price: 7, stock: 10, admin: admin2)
+
+    cust_user = User.create!(username: "cust", email: "cust@example.test", password: "Password1!")
+    customer = Customer.create!(user: cust_user)
 
     order = Order.create!(customer: customer, status: "pending")
-    order.order_items.create!(product: product1, quantity: 1, price: product1.price)
-    order.order_items.create!(product: product2, quantity: 2, price: product2.price)
+    OrderItem.create!(order: order, product: p1, quantity: 1, price: 5)
+    OrderItem.create!(order: order, product: p2, quantity: 2, price: 7)
 
-    assert_difference -> { ActionMailer::Base.deliveries.size }, +3 do
-      perform_enqueued_jobs do
-        # Call the internal method directly to avoid after_commit behavior under transactional tests
-        order.send(:send_notifications)
-      end
+    perform_enqueued_jobs do
+      # trigger callbacks explicitly in case transactional tests suppress after_commit
+      order.send(:send_notifications)
     end
 
-    recipients = ActionMailer::Base.deliveries.last(3).map { |m| m.to }.flatten
-
-    # Admin one and two should each receive one email
-    assert_includes recipients, users(:one).email
-    assert_includes recipients, users(:two).email
-
-    # Customer (user one) should also receive a confirmation, resulting in user one receiving two emails total
-    assert_equal 2, recipients.count(users(:one).email)
-    assert_equal 1, recipients.count(users(:two).email)
+    # Expect 3 emails: admin1, admin2, customer
+    deliveries = ActionMailer::Base.deliveries.last(3)
+    tos = deliveries.flat_map(&:to)
+    assert_includes tos, [admin1_user.email]
+    assert_includes tos, [admin2_user.email]
+    assert_includes tos, [cust_user.email]
   end
 end

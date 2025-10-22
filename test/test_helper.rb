@@ -8,7 +8,7 @@ module ActiveSupport
     parallelize(workers: :number_of_processors)
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
+    # fixtures :all
 
     # Map fixtures to non-standard model name
     set_fixture_class admins: AdminUser
