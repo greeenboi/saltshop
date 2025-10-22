@@ -1,11 +1,10 @@
 class OrdersController < ApplicationController
   before_action :require_user
-  before_action :set_order, only: %i[ show edit update destroy ]
-
+  before_action :set_order, only: %i[show edit update destroy]
 
   # GET /orders or /orders.json
   def index
-    @orders = current_user.customer.orders.order(created_at: :desc)
+    @orders = current_user.customer&.orders&.order(created_at: :desc) || Order.none
   end
 
   # GET /orders/1 or /orders/1.json
@@ -91,13 +90,12 @@ class OrdersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order
-      @order = Order.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def order_params
-      params.require(:order).permit(:customer_id, :status)
-    end
+  def set_order
+    @order = Order.find(params[:id])
+  end
+
+  def order_params
+    params.require(:order).permit(:customer_id, :status)
+  end
 end
