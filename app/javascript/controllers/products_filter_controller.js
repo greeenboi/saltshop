@@ -65,13 +65,20 @@ export default class extends Controller {
       return
     }
 
-    const [key, dir] = value.split("-") // e.g., "price-asc"
+    const [key, dir] = value.split("-") // e.g., "price-asc", "name-desc"
     const visibleCards = this.cardTargets.filter((c) => c.style.display !== "none")
 
     visibleCards.sort((a, b) => {
-      const av = key === "price" ? parseFloat(a.dataset.price) : parseInt(a.dataset.stock, 10)
-      const bv = key === "price" ? parseFloat(b.dataset.price) : parseInt(b.dataset.stock, 10)
-      return dir === "asc" ? av - bv : bv - av
+      if (key === "name") {
+        const an = (a.dataset.name || "").toString()
+        const bn = (b.dataset.name || "").toString()
+        const cmp = an.localeCompare(bn)
+        return dir === "asc" ? cmp : -cmp
+      } else {
+        const av = key === "price" ? parseFloat(a.dataset.price) : parseInt(a.dataset.stock, 10)
+        const bv = key === "price" ? parseFloat(b.dataset.price) : parseInt(b.dataset.stock, 10)
+        return dir === "asc" ? av - bv : bv - av
+      }
     })
 
     const grid = this.hasGridTarget ? this.gridTarget : this.element
