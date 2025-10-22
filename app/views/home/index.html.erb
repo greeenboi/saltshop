@@ -27,7 +27,9 @@
             <p class="text-xl font-bold text-gray-900"><%= number_to_currency(product.price) %></p>
             <div class="flex items-center space-x-2">
               <%= link_to "View", product_path(product), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
-              <%= button_to "Add to Cart", cart_items_path(product_id: product.id), method: :post, class: "ml-2 inline-flex items-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow" %>
+              <% unless current_user&.role&.name == "admin" %>
+                <%= button_to "Add to Cart", cart_items_path(product_id: product.id), method: :post, class: "ml-2 inline-flex items-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow" %>
+              <% end %>
             </div>
           </div>
         </div>
