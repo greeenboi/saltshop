@@ -1,0 +1,15 @@
+Order#order_confirmation
+
+<%= @greeting %>, find me in app/views/order_mailer/order_confirmation.text.erb
+
+Thanks for your order, <%= @user&.name.presence || @user&.email %>!
+
+Your order #<%= @order.id %> has been placed successfully. Here are your details:
+
+<% @order.order_items.includes(:product).each do |item| %>
+- <%= item.product&.name %> | Qty: <%= item.quantity %> | Unit: <%= number_to_currency(item.price) %> | Total: <%= number_to_currency(item.price * item.quantity) %>
+<% end %>
+
+Order total: <%= number_to_currency(@order.calculate_total) %>
+
+We'll notify you when your items ship.

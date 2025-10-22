@@ -1,0 +1,30 @@
+<h1>Thanks for your order, <%= @user&.name.presence || @user&.email %>!</h1>
+
+<p>Your order <strong>#<%= @order.id %></strong> has been placed successfully. Here are your details:</p>
+
+<table cellpadding="6" cellspacing="0" border="1" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th align="left">Product</th>
+      <th align="right">Qty</th>
+      <th align="right">Unit price</th>
+      <th align="right">Line total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.includes(:product).each do |item| %>
+      <tr>
+        <td><%= item.product&.name %></td>
+        <td align="right"><%= item.quantity %></td>
+        <td align="right"><%= number_to_currency(item.price) %></td>
+        <td align="right"><%= number_to_currency(item.price * item.quantity) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p>
+  Order total: <strong><%= number_to_currency(@order.calculate_total) %></strong>
+</p>
+
+<p>We'll notify you when your items ship.</p>
