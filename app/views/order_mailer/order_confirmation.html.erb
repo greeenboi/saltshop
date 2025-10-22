@@ -1,30 +1,245 @@
-<h1>Thanks for your order, <%= @user&.name.presence || @user&.email %>!</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #111827;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+    }
+    .email-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .email-header h1 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+    }
+    .email-header p {
+      color: #e0e7ff;
+      font-size: 16px;
+      margin: 0;
+    }
+    .email-body {
+      padding: 32px 24px;
+    }
+    .order-info {
+      background-color: #f3f4f6;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .order-info p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #4b5563;
+    }
+    .order-info strong {
+      color: #111827;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      margin: 24px 0 16px 0;
+    }
+    .order-items {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .order-item {
+      display: table;
+      width: 100%;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px;
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .item-details {
+      padding: 8px 0;
+    }
+    .item-name {
+      font-weight: 600;
+      color: #111827;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .item-qty {
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .item-price {
+      text-align: right;
+      padding: 8px 0;
+    }
+    .item-total {
+      font-weight: 600;
+      color: #111827;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .item-unit-price {
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .summary-box {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+      color: #4b5563;
+    }
+    .summary-row.total {
+      border-top: 2px solid #e5e7eb;
+      margin-top: 8px;
+      padding-top: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .summary-label {
+      font-weight: 500;
+    }
+    .summary-value {
+      font-weight: 600;
+    }
+    .shipping-free {
+      color: #10b981;
+      font-weight: 600;
+    }
+    .footer-message {
+      background-color: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      border-radius: 4px;
+      margin: 24px 0;
+    }
+    .footer-message p {
+      margin: 0;
+      color: #1e40af;
+      font-size: 14px;
+    }
+    .email-footer {
+      background-color: #f3f4f6;
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .email-footer p {
+      margin: 4px 0;
+    }
+    table {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <!-- Header -->
+    <div class="email-header">
+      <h1>Order Confirmed! 🎉</h1>
+      <p>Thank you for your purchase, <%= @user&.name.presence || @user&.email %>!</p>
+    </div>
 
-<p>Your order <strong>#<%= @order.id %></strong> has been placed successfully. Here are your details:</p>
+    <!-- Body -->
+    <div class="email-body">
+      <!-- Order Info -->
+      <div class="order-info">
+        <p><strong>Order Number:</strong> #<%= @order.id %></p>
+        <p><strong>Order Date:</strong> <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        <p><strong>Customer Email:</strong> <%= @user&.email %></p>
+      </div>
 
-<table cellpadding="6" cellspacing="0" border="1" style="border-collapse: collapse;">
-  <thead>
-    <tr>
-      <th align="left">Product</th>
-      <th align="right">Qty</th>
-      <th align="right">Unit price</th>
-      <th align="right">Line total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @order.order_items.includes(:product).each do |item| %>
-      <tr>
-        <td><%= item.product&.name %></td>
-        <td align="right"><%= item.quantity %></td>
-        <td align="right"><%= number_to_currency(item.price) %></td>
-        <td align="right"><%= number_to_currency(item.price * item.quantity) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <!-- Order Items -->
+      <h2 class="section-title">Order Details</h2>
+      <div class="order-items">
+        <% @order.order_items.includes(:product).each do |item| %>
+          <table class="order-item">
+            <tr>
+              <td style="width: 70%;">
+                <div class="item-details">
+                  <div class="item-name"><%= item.product&.name %></div>
+                  <div class="item-qty">Quantity: <%= item.quantity %></div>
+                </div>
+              </td>
+              <td style="width: 30%;">
+                <div class="item-price">
+                  <div class="item-total"><%= number_to_currency(item.price * item.quantity) %></div>
+                  <div class="item-unit-price"><%= number_to_currency(item.price) %> each</div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        <% end %>
+      </div>
 
-<p>
-  Order total: <strong><%= number_to_currency(@order.calculate_total) %></strong>
-</p>
+      <!-- Order Summary -->
+      <h2 class="section-title">Order Summary</h2>
+      <div class="summary-box">
+        <%
+          subtotal = @order.order_items.sum { |item| item.price * item.quantity }
+          tax = (subtotal * 0.1).round(2)
+          total = (subtotal + tax).round(2)
+        %>
 
-<p>We'll notify you when your items ship.</p>
+        <div class="summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span class="summary-value"><%= number_to_currency(subtotal) %></span>
+        </div>
+
+        <div class="summary-row">
+          <span class="summary-label">Tax (10%)</span>
+          <span class="summary-value"><%= number_to_currency(tax) %></span>
+        </div>
+
+        <div class="summary-row">
+          <span class="summary-label">Shipping</span>
+          <span class="shipping-free">FREE</span>
+        </div>
+
+        <div class="summary-row total">
+          <span class="summary-label">Total</span>
+          <span class="summary-value"><%= number_to_currency(total) %></span>
+        </div>
+      </div>
+
+      <!-- Footer Message -->
+      <div class="footer-message">
+        <p><strong>📦 What's next?</strong></p>
+        <p>We're processing your order and will notify you when your items ship. You'll receive tracking details via email.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="email-footer">
+      <p>Thank you for shopping with us!</p>
+      <p>If you have any questions, please contact our support team.</p>
+      <p>&copy; <%= Time.current.year %> SaltShop. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
