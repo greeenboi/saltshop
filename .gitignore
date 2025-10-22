@@ -41,3 +41,7 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Ignore application configuration
+/config/cloudinary.yml
+/config/application.yml

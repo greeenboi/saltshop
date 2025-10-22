@@ -13,8 +13,8 @@ Rails.application.routes.draw do
   get "/signup", to: "users#new", as: :signup
   resources :users, only: [:create, :edit, :update]
 
-  # Public product browsing
-  resources :products, only: [:index, :show]
+  # Public product browsing and management
+  resources :products
 
   # Shopping cart
   resource :cart, only: [:show], controller: :carts

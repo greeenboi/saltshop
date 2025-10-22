@@ -66,11 +66,11 @@ class CustomersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_customer
-      @customer = Customer.find(params.expect(:id))
+      @customer = Customer.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def customer_params
-      params.expect(customer: [ :user_id ])
+      params.require(:customer).permit(:user_id, :avatar)
     end
 end

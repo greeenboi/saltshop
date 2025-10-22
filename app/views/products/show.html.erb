@@ -7,8 +7,16 @@
 
   <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-100 p-6 md:flex md:gap-8">
     <!-- Images -->
-    <div class="product-images md:w-1/2 w-full flex items-center justify-center">
-      <% if @product.respond_to?(:image_url) && @product.image_url.present? %>
+    <div class="product-images md:w-1/2 w-full">
+      <% if @product.images.attached? %>
+        <div class="grid grid-cols-2 gap-3">
+          <% @product.images.each do |img| %>
+            <div class="w-full aspect-square bg-gray-50 border border-gray-200 rounded-md flex items-center justify-center overflow-hidden">
+              <%= cl_image_tag(img.key, width: 600, height: 600, crop: "fill", alt: @product.name, class: "w-full h-full object-cover") %>
+            </div>
+          <% end %>
+        </div>
+      <% elsif @product.respond_to?(:image_url) && @product.image_url.present? %>
         <%= image_tag @product.image_url, alt: @product.name, class: "w-full h-80 object-cover rounded-md" %>
       <% else %>
         <div class="w-full h-80 bg-gray-50 border border-dashed border-gray-200 rounded-md flex items-center justify-center text-gray-400">

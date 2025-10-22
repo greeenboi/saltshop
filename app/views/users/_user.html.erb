@@ -4,7 +4,9 @@
 
   <div class="flex items-start gap-4 relative z-10">
     <div class="flex-shrink-0">
-      <% if user.photo_url.present? %>
+      <% if user.avatar&.attached? %>
+        <%= cl_image_tag(user.avatar.key, width: 56, height: 56, crop: "fill", gravity: "face", radius: "max", alt: user.name || user.username, class: 'h-14 w-14 rounded-full object-cover border border-gray-200 shadow-sm group-hover:shadow transition-shadow' ) %>
+      <% elsif user.photo_url.present? %>
         <%= image_tag user.photo_url, alt: user.name || user.username, class: 'h-14 w-14 rounded-full object-cover border border-gray-200 shadow-sm group-hover:shadow transition-shadow' %>
       <% else %>
         <% initials = (user.name.presence || user.username).to_s.split.map { |s| s[0] }.join.upcase[0,2] %>

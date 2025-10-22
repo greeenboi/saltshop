@@ -3,6 +3,9 @@ class User < ApplicationRecord
   has_one :customer
   has_one :admin_user, class_name: "AdminUser"
 
+  # Attachments
+  has_one_attached :avatar
+
   # Backcompat helper for legacy calls
   def admin
     admin_user

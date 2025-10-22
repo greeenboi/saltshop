@@ -2,6 +2,9 @@ class Product < ApplicationRecord
   # Primary association (matches fixtures: `admin: one`)
   belongs_to :admin, class_name: "AdminUser", foreign_key: "admin_id"
 
+  # Attachments
+  has_many_attached :images
+
   # Backcompat: some code may still call `admin_user`
   def admin_user
     admin
