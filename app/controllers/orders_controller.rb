@@ -4,7 +4,18 @@ class OrdersController < ApplicationController
 
   # GET /orders or /orders.json
   def index
-    @orders = current_user.customer&.orders&.order(created_at: :desc) || Order.none
+    # Base scope: current user's orders
+    scope = current_user.customer&.orders || Order.none
+
+    # Optional search by product name/description
+    if params[:q].present?
+      q = "%#{params[:q].to_s.strip.downcase}%"
+      scope = scope.joins(:products)
+        .where("LOWER(products.name) LIKE :q OR LOWER(products.description) LIKE :q", q: q)
+        .distinct
+    end
+
+    @orders = scope.order(created_at: :desc)
   end
 
   # GET /orders/1 or /orders/1.json

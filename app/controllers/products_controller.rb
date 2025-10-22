@@ -1,11 +1,16 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show edit update destroy ]
+  before_action :set_product, only: %i[show edit update destroy]
   # Only admins can create/update/destroy products
   before_action :require_admin, except: %i[index show]
 
   # GET /products or /products.json
   def index
-    @products = Product.page(params[:page]).per(12)
+    scope = Product.all
+    if params[:q].present?
+      q = "%#{params[:q].to_s.strip.downcase}%"
+      scope = scope.where("LOWER(name) LIKE ? OR LOWER(description) LIKE ?", q, q)
+    end
+    @products = scope.page(params[:page]).per(12)
   end
 
   # GET /products/1 or /products/1.json
@@ -64,13 +69,14 @@ class ProductsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def product_params
-      params.require(:product).permit(:name, :description, :price, :stock, images: [])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product
+    @product = Product.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def product_params
+    params.require(:product).permit(:name, :description, :price, :stock, images: [])
+  end
 end

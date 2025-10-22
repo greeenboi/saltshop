@@ -9,6 +9,16 @@
     <%= link_to "Back to Dashboard", admin_root_path, class: "px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition" %>
   </div>
 
+  <div class="mb-4">
+    <%= form_with url: admin_orders_path, method: :get, local: true, class: "flex gap-2" do %>
+      <%= text_field_tag :q, params[:q], placeholder: "Search by customer or product name…", class: "flex-1 px-3 py-2 border rounded-md" %>
+      <%= submit_tag "Search", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium" %>
+      <% if params[:q].present? %>
+        <%= link_to "Clear", admin_orders_path, class: "px-3 py-2 bg-gray-100 hover:bg-gray-50 rounded-md text-sm" %>
+      <% end %>
+    <% end %>
+  </div>
+
   <% if @orders.any? %>
     <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
@@ -75,7 +85,7 @@
     </div>
 
     <div class="mt-6">
-      <%= paginate @orders %>
+      <%= paginate @orders, params: request.query_parameters %>
     </div>
   <% else %>
     <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-12 text-center">
@@ -88,4 +98,3 @@
     </div>
   <% end %>
 </div>
-

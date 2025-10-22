@@ -66,16 +66,16 @@
     <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
       <h2 class="text-lg font-semibold mb-3">Your Revenue</h2>
       <p class="text-2xl font-bold text-green-600">
-        <%= number_to_currency(@admin_order_items.sum { |item| item.price * item.quantity }) %>
+        <%= number_to_currency(@admin_order_items_all.sum { |item| item.price * item.quantity }) %>
       </p>
-      <p class="text-sm text-gray-500 mt-1">From <%= pluralize(@admin_order_items.count, 'item') %></p>
+      <p class="text-sm text-gray-500 mt-1">From <%= pluralize(@admin_order_items_all.count, 'item') %></p>
     </div>
 
     <!-- Order Stats -->
     <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
       <h2 class="text-lg font-semibold mb-3">Order Stats</h2>
       <p class="text-sm text-gray-600">Total Items: <span class="font-medium text-gray-900"><%= @order.order_items.count %></span></p>
-      <p class="text-sm text-gray-600">Your Items: <span class="font-medium text-gray-900"><%= @admin_order_items.count %></span></p>
+      <p class="text-sm text-gray-600">Your Items: <span class="font-medium text-gray-900"><%= @admin_order_items_all.count %></span></p>
       <p class="text-sm text-gray-600 mt-2">Order Total: <span class="font-medium text-gray-900"><%= number_to_currency(@order.calculate_total) %></span></p>
     </div>
   </div>
@@ -112,11 +112,15 @@
       <% end %>
     </div>
 
+    <div class="mt-6">
+      <%= paginate @admin_order_items %>
+    </div>
+
     <div class="mt-6 pt-4 border-t">
       <div class="flex justify-between items-center">
         <span class="text-lg font-semibold text-gray-900">Your Total Revenue</span>
         <span class="text-2xl font-bold text-green-600">
-          <%= number_to_currency(@admin_order_items.sum { |item| item.price * item.quantity }) %>
+          <%= number_to_currency(@admin_order_items_all.sum { |item| item.price * item.quantity }) %>
         </span>
       </div>
     </div>
