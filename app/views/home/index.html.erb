@@ -1,19 +1,45 @@
-<div class="hero-section">
-  <h1>Welcome to Salt Shop</h1>
-  <p>Your premium source for quality products</p>
-  <a href="/products" class="btn btn-primary">Shop Now</a>
+<% content_for :title, "Salt Shop" %>
+
+<div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+    <h1 class="text-4xl sm:text-5xl font-extrabold">Welcome to Salt Shop</h1>
+    <p class="mt-4 text-lg sm:text-xl text-indigo-100">Your premium source for quality products</p>
+    <%= link_to "Shop Now", products_path, class: "mt-8 inline-block bg-white text-indigo-600 px-6 py-3 rounded-md font-medium shadow hover:opacity-90" %>
+  </div>
 </div>
 
-<div class="featured-products">
-  <h2>Featured Products</h2>
-  <div class="product-grid">
-    <% @featured_products.each do |product| %>
-      <div class="product-card">
-        <h3><%= product.name %></h3>
-        <p class="price">$<%= product.price %></p>
-        <p><%= truncate(product.description, length: 100) %></p>
-        <%= button_to "Add to Cart", cart_items_path(product_id: product.id), method: :post, class: "btn btn-secondary" %>
-      </div>
-    <% end %>
+<div class="max-w-7xl mx-auto px-6 lg:px-8 my-12">
+  <div class="mb-8 flex items-center justify-between">
+    <h2 class="text-2xl font-semibold text-gray-900">Featured Products</h2>
+    <p class="text-sm text-gray-500">Hand-picked items for you</p>
   </div>
+
+  <% if @featured_products.present? && @featured_products.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @featured_products.each do |product| %>
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 flex flex-col">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= product.name %></h3>
+            <p class="text-sm text-gray-500 mb-4"><%= truncate(product.description, length: 120) %></p>
+          </div>
+
+          <div class="mt-4 flex items-center justify-between">
+            <p class="text-xl font-bold text-gray-900"><%= number_to_currency(product.price) %></p>
+            <div class="flex items-center space-x-2">
+              <%= link_to "View", product_path(product), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+              <%= button_to "Add to Cart", cart_items_path(product_id: product.id), method: :post, class: "ml-2 inline-flex items-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-12 text-center">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">No featured products</h3>
+      <p class="text-gray-500">We don't have featured items right now. Check back later or browse all products.</p>
+      <div class="mt-4">
+        <%= link_to "Browse Products", products_path, class: "inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium" %>
+      </div>
+    </div>
+  <% end %>
 </div>

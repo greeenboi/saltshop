@@ -4,7 +4,9 @@
       <%# dynamic heading and role badge %>
       <% role_value = user.role.presence || 'customer' %>
       <h2 class="text-3xl font-bold text-gray-900"><%= user.persisted? ? 'Editing user' : 'Creating user' %></h2>
-      <p class="mt-2 text-sm text-gray-600">Join us today</p>
+      <% unless user.persisted? %>
+        <p class="mt-2 text-sm text-gray-600">Join us today</p>
+      <% end %>
       <div class="mt-2">
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
           <%= role_value == 'admin' ? 'Business (admin)' : 'Customer' %>
@@ -17,9 +19,7 @@
         <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-              </svg>
+              <span class="inline-flex items-center justify-center h-5 w-5 text-red-400" aria-hidden="true">&#9888;</span>
             </div>
             <div class="ml-3">
               <h3 class="text-sm font-medium text-red-800">
@@ -35,21 +35,24 @@
         </div>
       <% end %>
 
-      <!-- Account Type Toggle (model-bound) -->
-      <div class="flex items-center justify-center space-x-4 p-1 bg-gray-100 rounded-lg">
-        <label class="flex-1 cursor-pointer">
-          <%= form.radio_button :role, 'customer', checked: (role_value == 'customer'), class: 'hidden peer', onchange: "toggleAccountType('customer')" %>
-          <div class="text-center py-2 px-4 rounded-md peer-checked:bg-white peer-checked:shadow-md peer-checked:text-indigo-600 transition-all duration-200 font-medium text-gray-600">
-            Customer
-          </div>
-        </label>
-        <label class="flex-1 cursor-pointer">
-          <%= form.radio_button :role, 'admin', checked: (role_value == 'admin'), class: 'hidden peer', onchange: "toggleAccountType('admin')" %>
-          <div class="text-center py-2 px-4 rounded-md peer-checked:bg-white peer-checked:shadow-md peer-checked:text-indigo-600 transition-all duration-200 font-medium text-gray-600">
-            Business Owner
-          </div>
-        </label>
-      </div>
+      <%# Account Type Toggle: only show when creating a new user %>
+      <% unless user.persisted? %>
+        <!-- Account Type Toggle (model-bound) -->
+        <div class="flex items-center justify-center space-x-4 p-1 bg-gray-100 rounded-lg">
+          <label class="flex-1 cursor-pointer">
+            <%= form.radio_button :role, 'customer', checked: (role_value == 'customer'), class: 'hidden peer', onchange: "toggleAccountType('customer')" %>
+            <div class="text-center py-2 px-4 rounded-md peer-checked:bg-white peer-checked:shadow-md peer-checked:text-indigo-600 transition-all duration-200 font-medium text-gray-600">
+              Customer
+            </div>
+          </label>
+          <label class="flex-1 cursor-pointer">
+            <%= form.radio_button :role, 'admin', checked: (role_value == 'admin'), class: 'hidden peer', onchange: "toggleAccountType('admin')" %>
+            <div class="text-center py-2 px-4 rounded-md peer-checked:bg-white peer-checked:shadow-md peer-checked:text-indigo-600 transition-all duration-200 font-medium text-gray-600">
+              Business Owner
+            </div>
+          </label>
+        </div>
+      <% end %>
 
       <div>
         <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
@@ -89,13 +92,15 @@
       <%= form.hidden_field :date_created, value: Time.current %>
 
       <div>
-        <%= form.submit "Create Account", class: "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.02] shadow-lg cursor-pointer" %>
+        <%= form.submit (user.persisted? ? "Save" : "Create Account"), class: "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.02] shadow-lg cursor-pointer" %>
       </div>
 
-      <div class="text-center text-sm text-gray-600">
-        Already have an account?
-        <%= link_to "Sign in", login_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
-      </div>
+      <% unless user.persisted? %>
+        <div class="text-center text-sm text-gray-600">
+          Already have an account?
+          <%= link_to "Sign in", login_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
